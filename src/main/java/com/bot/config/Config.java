@@ -1,4 +1,4 @@
-package com.bot;
+package com.bot.config;
 
 import java.io.*;
 import java.util.Properties;

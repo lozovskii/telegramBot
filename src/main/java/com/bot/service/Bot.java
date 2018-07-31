@@ -1,5 +1,6 @@
-package com.bot;
+package com.bot.service;
 
+import com.bot.config.Config;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
