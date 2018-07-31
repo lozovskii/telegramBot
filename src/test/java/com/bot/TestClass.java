@@ -35,8 +35,6 @@ public class TestClass {
     @Test
     public void getCityId() throws NoSuchCityException {
         SQLContext sqlContext = SQLContext.getOrCreate(sc.sc()).newSession();
-//        String correctCityNameFormat = city.substring(0, 1).toUpperCase() + city.substring(1, city.length()).toLowerCase();
-//        Column columnName = new Column("name");
         Dataset<Row> json = sqlContext.read().option("multiline", "true").json(jsonPath);
         json.show(false);
 
