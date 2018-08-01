@@ -25,8 +25,8 @@ public class MessageServiceImpl implements MessageService {
                 return "My name test503503Bot";
             default:
                 try{
-                    Long cityId = weatherService.getCityId(phrase);
-                    return cityId.toString();
+                    String cityId = weatherService.getCityId(phrase);
+                    return cityId;
                 } catch (NoSuchCityException e) {
                     return "Sorry, but i don't understand...";
                 }

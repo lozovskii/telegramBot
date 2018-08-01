@@ -23,7 +23,7 @@ public class WeatherServiceImpl implements WeatherService {
     private JavaSparkContext sc;
 
     @Override
-    public Long getCityId(String city) throws NoSuchCityException {
+    public String getCityId(String city) throws NoSuchCityException {
         SQLContext sqlContext = SQLContext.getOrCreate(sc.sc()).newSession();
         String correctCityNameFormat = city.substring(0, 1).toUpperCase() + city.substring(1, city.length()).toLowerCase();
         Column columnName = new Column("name");
@@ -37,6 +37,6 @@ public class WeatherServiceImpl implements WeatherService {
         }catch (NoSuchElementException e){
             throw  new NoSuchCityException("This city name is not correct or city with this name does not exist!");
         }
-        return Long.valueOf(((Row) rowEntity).get(2).toString());
+        return (((Row) rowEntity).get(2).toString());
     }
 }
