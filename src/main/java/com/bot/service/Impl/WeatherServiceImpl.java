@@ -32,10 +32,10 @@ public class WeatherServiceImpl implements WeatherService {
                 .json(jsonPath)
                 .filter(columnName.equalTo(correctCityNameFormat));
         Object rowEntity;
-        try{
-            rowEntity =json.first();
-        }catch (NoSuchElementException e){
-            throw  new NoSuchCityException("This city name is not correct or city with this name does not exist!");
+        try {
+            rowEntity = json.first();
+        } catch (NoSuchElementException e) {
+            throw new NoSuchCityException("This city name is not correct or city with this name does not exist!");
         }
         return (((Row) rowEntity).get(2).toString());
     }

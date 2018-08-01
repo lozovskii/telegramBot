@@ -13,4 +13,15 @@ public class CityAnswerModel {
     private String visibility;
     private String windSpeed;
 
+    @Override
+    public String toString() {
+        return "" +
+                name + ": " +
+                description + "\n" +
+                "temperature = '" + temp + '\'' + "\n" +
+                "pressure = '" + pressure + '\'' + "\n" +
+                "humidity = '" + humidity + '\'' + "\n" +
+                "visibility = '" + visibility + '\'' + "\n" +
+                "windSpeed = '" + windSpeed + '\'';
+    }
 }

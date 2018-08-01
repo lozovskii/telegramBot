@@ -91,6 +91,12 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <!--fix java.lang.NoSuchMethodError: com.google.common.base.Stopwatch.elapsedMillis()J-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>15.0</version>
+        </dependency>
     </dependencies>
 
     <build>

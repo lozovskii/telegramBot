@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
+
 @Service
 @PropertySource("classpath:bot.properties")
 public class Bot extends TelegramLongPollingBot {
@@ -27,10 +29,16 @@ public class Bot extends TelegramLongPollingBot {
         this.messageService = messageService;
     }
 
+    @Override
     public void onUpdateReceived(Update update) {
         Message msg = update.getMessage();
         String text = msg.getText();
-        String answer = messageService.getAnswer(text);
+        String answer = null;
+        try {
+            answer = messageService.getAnswer(text);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         sendMsg(msg, answer);
     }
 

@@ -4,6 +4,8 @@ import com.bot.model.CityAnswerModel;
 import com.bot.service.WeatherRequestService;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -13,11 +15,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Service
+@PropertySource("classpath:weather.properties")
 public class WeatherRequestServiceImpl implements WeatherRequestService {
+
+    @Value("${weather.token}")
+    private String weatherToken;
+
     @Override
     public CityAnswerModel getWeather(String cityId) throws IOException {
         URL url = new URL("http://api.openweathermap.org/data/2.5/weather?id=" + cityId +
-                "&units=metric&appid=0b9500b929ea466a01d56bf6f86441af");
+                "&units=metric&appid=" + weatherToken);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -42,7 +49,7 @@ public class WeatherRequestServiceImpl implements WeatherRequestService {
         try {
             cityAnswerModel.setVisibility(jsonResponse.get("visibility").toString());
         } catch (JSONException e) {
-            cityAnswerModel.setVisibility(null);
+            cityAnswerModel.setVisibility("unknown");
         }
         cityAnswerModel.setWindSpeed(jsonResponse.getJSONObject("wind")
                 .get("speed").toString());
