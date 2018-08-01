@@ -1,34 +1,45 @@
 package com.bot.service;
 
-import com.bot.config.Config;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.api.objects.Update;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+@Service
+@PropertySource("classpath:bot.properties")
 public class Bot extends TelegramLongPollingBot {
 
+    private MessageService messageService;
+
+    @Value("${bot.name}")
+    private String botName;
+
+    @Value("${bot.token}")
+    private String botToken;
+
+    @Autowired
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
     public void onUpdateReceived(Update update) {
-        Message msg = update.getMessage(); // Это нам понадобится
-        String txt = msg.getText();
-        if (txt.equals("/start")) {
-            sendMsg(msg, "Hello, world! This is simple bot!");
-        }else if(txt.equals("yo") || txt.equals("hello") || txt.equals("hi")){
-            sendMsg(msg, "Bonjour!");
-        }else if(txt.equals("What is your name?") || txt.equals("what is your name?")){
-            sendMsg(msg, "My name test503503Bot");
-        }else{
-            sendMsg(msg, "Sorry, but i don't understand :( \nHope study it");
-        }
+        Message msg = update.getMessage();
+        String text = msg.getText();
+        String answer = messageService.getAnswer(text);
+        sendMsg(msg, answer);
     }
 
     public String getBotUsername() {
-        return Config.botName;
+        return botName;
     }
 
     public String getBotToken() {
-        return Config.botToken;
+        return botToken;
     }
 
     private void sendMsg(Message msg, String text) {

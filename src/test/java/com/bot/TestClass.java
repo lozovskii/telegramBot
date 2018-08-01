@@ -1,6 +1,7 @@
 package com.bot;
 
 import com.bot.config.AppConfig;
+import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
 import com.bot.util.NoSuchCityException;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -26,15 +27,15 @@ public class TestClass {
     @Autowired
     private WeatherService weatherService;
 
-    @Value("${dataPath}")
-    private String path;
+    @Autowired
+    private MessageService messageService;
 
     @Value("${jsonPath}")
     private String jsonPath;
 
     @Test
     public void getCityId() throws NoSuchCityException {
-        Long kievId = weatherService.getCityId("Kiev", sc);
+        Long kievId = weatherService.getCityId("Kiev");
         Assert.assertEquals(kievId, Long.valueOf("703448"));
     }
 

@@ -2,6 +2,7 @@
 
 src/main/resources/data/
 src/main/resources/bot.properties
+src/main/resources/weather.properties
 
 ### STS ###
 .apt_generated
