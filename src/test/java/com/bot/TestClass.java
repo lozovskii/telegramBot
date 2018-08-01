@@ -34,13 +34,8 @@ public class TestClass {
 
     @Test
     public void getCityId() throws NoSuchCityException {
-        SQLContext sqlContext = SQLContext.getOrCreate(sc.sc()).newSession();
-        Dataset<Row> json = sqlContext.read().option("multiline", "true").json(jsonPath);
-        json.show(false);
-
-
-//        Long kievId = weatherService.getCityId("Kiev", sc);
-//        Assert.assertEquals(kievId, Long.valueOf("703448"));
+        Long kievId = weatherService.getCityId("Kiev", sc);
+        Assert.assertEquals(kievId, Long.valueOf("703448"));
     }
 
 }

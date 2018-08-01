@@ -23,13 +23,11 @@ public class WeatherServiceImpl implements WeatherService {
         Column columnName = new Column("name");
         Dataset<Row> json = sqlContext.read()
                 .option("multiline", "true")
-                .json(jsonPath);
-        json.show(false);
-//                .filter(columnName.equalTo("\"" + correctCityNameFormat + "\""));
+                .json(jsonPath)
+                .filter(columnName.equalTo(correctCityNameFormat));
         Object rowEntity = json.first();
         if(rowEntity == null){
-            System.out.println("Error here");
-//            throw new NoSuchCityException("This city name is not correct or city with this name does not exist!");
+            throw new NoSuchCityException("This city name is not correct or city with this name does not exist!");
         }
         return Long.valueOf(((Row) rowEntity).get(2).toString());
     }

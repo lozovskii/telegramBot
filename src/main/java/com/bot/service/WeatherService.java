@@ -7,5 +7,4 @@ public interface WeatherService {
 
     Long getCityId(String city, JavaSparkContext sc) throws NoSuchCityException;
 
-
 }
