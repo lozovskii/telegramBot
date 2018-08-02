@@ -22,7 +22,7 @@ public class AppConfig {
     public JavaSparkContext sc(){
         SparkConf sparkConf = new SparkConf()
                 .setAppName("SparkNameTest")
-                .setMaster("local[*]");
+                .setMaster("local[*]").set("spark.driver.memory", "471859200");
         return new JavaSparkContext(sparkConf);
     }
 
