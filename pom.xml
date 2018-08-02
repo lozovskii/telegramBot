@@ -101,16 +101,16 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.heroku.sdk</groupId>
-                <artifactId>heroku-maven-plugin</artifactId>
-                <configuration>
-                    <configVars>
-                        <JAVA_TOOL_OPTIONS>-Xms512m -Xss512k -Dfile.encoding=UTF-8</JAVA_TOOL_OPTIONS>
-                        <JAVA_OPTS>-Xms512m -Xss512k -Dfile.encoding=UTF-8</JAVA_OPTS>
-                    </configVars>
-                </configuration>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>com.heroku.sdk</groupId>-->
+                <!--<artifactId>heroku-maven-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<configVars>-->
+                        <!--<JAVA_TOOL_OPTIONS>-Xms512m -Xss512k -Dfile.encoding=UTF-8</JAVA_TOOL_OPTIONS>-->
+                        <!--<JAVA_OPTS>-Xms512m -Xss512k -Dfile.encoding=UTF-8</JAVA_OPTS>-->
+                    <!--</configVars>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
