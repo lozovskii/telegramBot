@@ -106,7 +106,7 @@
                 <artifactId>heroku-maven-plugin</artifactId>
                 <configuration>
                     <configVars>
-                        <JAVA_OPTS>-Xms512m -XX:PermSize=1024m</JAVA_OPTS>
+                        <JAVA_TOOL_OPTIONS>-Xms512m -Xss512k -Dfile.encoding=UTF-8</JAVA_TOOL_OPTIONS>
                     </configVars>
                 </configuration>
             </plugin>
