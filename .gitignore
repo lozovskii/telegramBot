@@ -1,8 +1,7 @@
 /target/
 
-src/main/resources/data/
-src/main/resources/bot.properties
-src/main/resources/weather.properties
+src/main/resources/data/test.txt
+src/main/resources/data/war_and_peace.txt
 
 ### STS ###
 .apt_generated
