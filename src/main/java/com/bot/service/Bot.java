@@ -19,10 +19,10 @@ public class Bot extends TelegramLongPollingBot {
     private MessageService messageService;
 
     @Value("${bot.name}")
-    private String botName;
+    private String botName = System.getenv("BOT_NAME");
 
     @Value("${bot.token}")
-    private String botToken;
+    private String botToken = System.getenv("BOT_TOKEN");
 
     @Autowired
     public void setMessageService(MessageService messageService) {
