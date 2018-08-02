@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/telegramBot-1.0-SNAPSHOT.jar --spring.profiles.active=$PROFILE
+web: java $JAVA_OPTS -jar target/telegramBot-1.0-SNAPSHOT.jar --spring.profiles.active=$PROFILE -Xms512m
