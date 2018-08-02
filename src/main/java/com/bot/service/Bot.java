@@ -13,15 +13,15 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.IOException;
 
 @Service
-@PropertySource("classpath:application-prod.properties")
+@PropertySource("classpath:application.properties")
 public class Bot extends TelegramLongPollingBot {
 
     private MessageService messageService;
 
-    @Value("${bot.name}")
+    @Value("${botName}")
     private String botName = System.getenv("BOT_NAME");
 
-    @Value("${bot.token}")
+    @Value("${botToken}")
     private String botToken = System.getenv("BOT_TOKEN");
 
     @Autowired
