@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
@@ -25,7 +27,9 @@ public class WeatherServiceImpl implements WeatherService {
     @Override
     public String getCityId(String city) throws NoSuchCityException {
         SQLContext sqlContext = SQLContext.getOrCreate(sc.sc()).newSession();
-        String correctCityNameFormat = city.substring(0, 1).toUpperCase() + city.substring(1, city.length()).toLowerCase();
+        String correctCityNameFormat =  Arrays.stream(city.split(" "))
+                .map(i -> i.substring(0, 1).toUpperCase() + i.substring(1, i.length()))
+                .collect(Collectors.joining(" "));
         Column columnName = new Column("name");
         Dataset<Row> json = sqlContext.read()
                 .option("multiline", "true")
