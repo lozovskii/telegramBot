@@ -107,6 +107,7 @@
                 <configuration>
                     <configVars>
                         <JAVA_TOOL_OPTIONS>-Xms512m -Xss512k -Dfile.encoding=UTF-8</JAVA_TOOL_OPTIONS>
+                        <JAVA_OPTS>-Xms512m -Xss512k -Dfile.encoding=UTF-8</JAVA_OPTS>
                     </configVars>
                 </configuration>
             </plugin>
