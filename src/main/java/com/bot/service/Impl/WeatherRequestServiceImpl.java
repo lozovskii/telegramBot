@@ -18,7 +18,7 @@ import java.net.URL;
 @PropertySource("classpath:weather.properties")
 public class WeatherRequestServiceImpl implements WeatherRequestService {
 
-    @Value("${weather.token}")
+    @Value("${weatherToken}")
     private String weatherToken;
 
     @Override

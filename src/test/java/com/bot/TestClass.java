@@ -12,6 +12,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +46,14 @@ public class TestClass {
     @Value("${jsonPath}")
     private String jsonPath;
 
+    @Ignore
     @Test
     public void getCityId() throws NoSuchCityException {
         String kievId = weatherService.getCityId("Kiev");
         Assert.assertEquals(kievId, "703448");
     }
 
+    @Ignore
     @Test
     public void testHttp() throws IOException {
         URL url = new URL("http://api.openweathermap.org/data/2.5/weather?id=703448&units=metric&appid=0b9500b929ea466a01d56bf6f86441af");
@@ -67,6 +70,7 @@ public class TestClass {
         log.debug(response.toString());
     }
 
+    @Ignore
     @Test
     public void jsonTest() throws JSONException {
         String json = "{\n" +
@@ -115,6 +119,7 @@ public class TestClass {
         log.debug(object.get("description"));
     }
 
+    @Ignore
     @Test
     public void getWeather() throws IOException {
         CityAnswerModel weather = weatherRequestService.getWeather("703448");
@@ -122,6 +127,7 @@ public class TestClass {
         log.debug(weather);
     }
 
+    @Ignore
     @Test
     public void getAnswer() throws IOException {
         String kiev = messageService.getAnswer("Kiev");
