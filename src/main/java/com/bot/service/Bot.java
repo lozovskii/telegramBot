@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.IOException;
 
 @Service
-@PropertySource("classpath:bot.properties")
+@PropertySource("classpath:application-prod.properties")
 public class Bot extends TelegramLongPollingBot {
 
     private MessageService messageService;
