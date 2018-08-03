@@ -21,12 +21,16 @@ public class WeatherRequestServiceImpl implements WeatherRequestService {
     @Value("${weatherToken}")
     private String weatherToken;
 
+    // why does thiis method throw IOException | consider handling it in try/catch
     @Override
     public CityAnswerModel getWeather(String cityId) throws IOException {
+        // its better to extract string constants
         URL url = new URL("http://api.openweathermap.org/data/2.5/weather?id=" + cityId +
                 "&units=metric&appid=" + weatherToken);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
+        // this should be in try/catch with resources
+        // consider creating separate method
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
         StringBuilder response = new StringBuilder();
@@ -34,10 +38,12 @@ public class WeatherRequestServiceImpl implements WeatherRequestService {
             response.append(inputLine);
         }
         in.close();
+        ///////////////////////////////////////////////////////
 
         JSONObject jsonResponse = new JSONObject(response.toString());
         CityAnswerModel cityAnswerModel = new CityAnswerModel();
         cityAnswerModel.setName(jsonResponse.get("name").toString());
+        // it is not obvius why 0 index is used here | consider refactoring
         cityAnswerModel.setDescription(jsonResponse.getJSONArray("weather")
                 .getJSONObject(0).get("description").toString());
         cityAnswerModel.setTemp(jsonResponse.getJSONObject("main")
@@ -46,6 +52,7 @@ public class WeatherRequestServiceImpl implements WeatherRequestService {
                 .get("pressure").toString());
         cityAnswerModel.setHumidity(jsonResponse.getJSONObject("main")
                 .get("humidity").toString());
+        // separate method for try/catch
         try {
             cityAnswerModel.setVisibility(jsonResponse.get("visibility").toString());
         } catch (JSONException e) {
