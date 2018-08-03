@@ -32,18 +32,24 @@ public class Bot extends TelegramLongPollingBot {
         Message msg = update.getMessage();
         String text = msg.getText();
         String answer = null;
+        // its better to extract try/catch clause in a separate method
+        // like String answer = getAnswer(text);
         try {
             answer = messageService.getAnswer(text);
         } catch (IOException e) {
+            // design proper exception handling
+            // example: throw new MyCustomRuntimeException("Failed to get answer for text " + text, e);
             e.printStackTrace();
         }
         sendMsg(msg, answer);
     }
 
+    // what is the purpose of this method | consider removing
     public String getBotUsername() {
         return botName;
     }
 
+    // what is the purpose of this method | consider removing
     public String getBotToken() {
         return botToken;
     }
@@ -52,6 +58,7 @@ public class Bot extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(msg.getChatId());
         message.setText(text);
+        // same as for onUpdateReceived method
         try {
             execute(message);
         } catch (TelegramApiException e) {
