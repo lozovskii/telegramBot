@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/telegramBot-1.0-SNAPSHOT.jar --spring.profiles.active=$PROFILE -Xmx512m
+worker: sh target/classes/com/bot/TelegramBotApplication --spring.profiles.active=$PROFILE $JAVA_OPTS
