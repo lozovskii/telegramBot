@@ -115,7 +115,7 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>com.bot.service.Bot</mainClass>
+                            <mainClass>com.bot.TelegramBotApplication</mainClass>
                             <name>Bot</name>
                         </program>
                     </programs>
