@@ -3,8 +3,6 @@ package com.bot.service.Impl;
 import com.bot.model.CityAnswerModel;
 import com.bot.service.WeatherRequestService;
 import com.bot.util.NoConnection;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,18 +27,16 @@ public class WeatherRequestServiceImpl implements WeatherRequestService {
     public CityAnswerModel getWeather(String cityId){
         String response = getWeatherConnection(cityId);
         JSONObject jsonResponse = new JSONObject(response);
-        CityAnswerModel cityAnswerModel = new CityAnswerModel();
-        cityAnswerModel.setName(jsonResponse.get("name").toString());
-        cityAnswerModel.setDescription(jsonResponse.getJSONArray("weather")
-                .getJSONObject(GETTING_FULL_SUBJSON).get("description").toString());
-        cityAnswerModel.setTemp(jsonResponse.getJSONObject("main")
-                .get("temp").toString());
-        cityAnswerModel.setPressure(jsonResponse.getJSONObject("main")
-                .get("pressure").toString());
-        cityAnswerModel.setHumidity(jsonResponse.getJSONObject("main")
-                .get("humidity").toString());
-        cityAnswerModel.setWindSpeed(jsonResponse.getJSONObject("wind")
-                .get("speed").toString());
+        CityAnswerModel cityAnswerModel = new CityAnswerModel
+                .CityAnswerModelBuilder(jsonResponse.get("name").toString())
+                .description(jsonResponse.getJSONArray("weather")
+                                         .getJSONObject(GETTING_FULL_SUBJSON)
+                                         .get("description").toString())
+                .temp(jsonResponse.getJSONObject("main").get("temp").toString())
+                .pressure(jsonResponse.getJSONObject("main").get("pressure").toString())
+                .humidity(jsonResponse.getJSONObject("main").get("humidity").toString())
+                .windSpeed(jsonResponse.getJSONObject("wind").get("speed").toString())
+                .build();
         setVisibilityForCity(cityAnswerModel, jsonResponse);
         return cityAnswerModel;
     }
@@ -49,7 +45,7 @@ public class WeatherRequestServiceImpl implements WeatherRequestService {
         try {
             cityAnswerModel.setVisibility(jsonResponse.get("visibility").toString());
         } catch (JSONException e) {
-            cityAnswerModel.setVisibility("unknown");
+//            cityAnswerModel.setVisibility("unknown");
             e.printStackTrace();
         }
     }
