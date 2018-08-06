@@ -1,5 +1,6 @@
 package com.bot.service;
 
+import com.bot.util.NoAnswerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,19 +32,16 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message msg = update.getMessage();
         String text = msg.getText();
-        String answer = null;
-        try {
-            answer = messageService.getAnswer(text);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String answer = getAnswer(text);
         sendMsg(msg, answer);
     }
 
+    @Override
     public String getBotUsername() {
         return botName;
     }
 
+    @Override
     public String getBotToken() {
         return botToken;
     }
@@ -56,6 +54,14 @@ public class Bot extends TelegramLongPollingBot {
             execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
+        }
+    }
+
+    private String getAnswer(String text){
+        try {
+            return messageService.getAnswer(text);
+        } catch (IOException e) {
+            throw new NoAnswerException("Failed to get answer for text: " + text, e);
         }
     }
 }

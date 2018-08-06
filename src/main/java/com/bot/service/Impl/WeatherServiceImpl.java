@@ -2,6 +2,8 @@ package com.bot.service.Impl;
 
 import com.bot.service.WeatherService;
 import com.bot.util.NoSuchCityException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
+    private final Integer CITY_ID_INDEX = 2;
 
     @Value("${jsonPath}")
     private String jsonPath;
@@ -27,9 +30,7 @@ public class WeatherServiceImpl implements WeatherService {
     @Override
     public String getCityId(String city) throws NoSuchCityException {
         SQLContext sqlContext = SQLContext.getOrCreate(sc.sc()).newSession();
-        String correctCityNameFormat =  Arrays.stream(city.split(" "))
-                .map(i -> i.substring(0, 1).toUpperCase() + i.substring(1, i.length()))
-                .collect(Collectors.joining(" "));
+        String correctCityNameFormat = makeCorrectCityNameFormat(city);
         Column columnName = new Column("name");
         Dataset<Row> json = sqlContext.read()
                 .option("multiline", "true")
@@ -39,8 +40,15 @@ public class WeatherServiceImpl implements WeatherService {
         try {
             rowEntity = json.first();
         } catch (NoSuchElementException e) {
-            throw new NoSuchCityException("This city name is not correct or city with this name does not exist!");
+            throw new NoSuchCityException("This city name is not correct or city with this name does not exist!", e);
         }
-        return (((Row) rowEntity).get(2).toString());
+        return (((Row) rowEntity).get(CITY_ID_INDEX).toString());
     }
+
+    private String makeCorrectCityNameFormat(String city){
+        return Arrays.stream(city.split(" "))
+                .map(i -> i.substring(0, 1).toUpperCase() + i.substring(1, i.length()))
+                .collect(Collectors.joining(" "));
+        }
+
 }
