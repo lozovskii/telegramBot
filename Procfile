@@ -1,1 +1,1 @@
-worker: sh target/classes/com/bot/Bot --spring.profiles.active=$PROFILE $JAVA_OPTS
+worker: sh target/bin/Bot --spring.profiles.active=$PROFILE $JAVA_OPTS
