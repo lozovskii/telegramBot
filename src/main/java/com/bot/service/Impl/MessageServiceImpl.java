@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -34,10 +36,17 @@ public class MessageServiceImpl implements MessageService {
                 try{
                     String cityId = weatherService.getCityId(phrase);
                     CityAnswerModel weather = weatherRequestService.getWeather(cityId);
-                    return weather.toString();
+                    return parseWeather(weather.toString());
                 } catch (NoSuchCityException e) {
                     return "Sorry, but i don't understand...";
                 }
         }
     }
+
+    private String parseWeather(String weather){
+        return Arrays.stream(weather.split("\\n"))
+                .filter(x -> !x.contains("visibility = 'null'"))
+                .collect(Collectors.joining("\n"));
+    }
+
 }

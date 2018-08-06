@@ -3,7 +3,6 @@ package com.bot.service.Impl;
 import com.bot.model.CityAnswerModel;
 import com.bot.service.WeatherRequestService;
 import com.bot.util.NoConnection;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -37,20 +36,9 @@ public class WeatherRequestServiceImpl implements WeatherRequestService {
                 .humidity(jsonResponse.getJSONObject("main").get("humidity").toString())
                 .windSpeed(jsonResponse.getJSONObject("wind").get("speed").toString())
                 .build();
-        Object visibility = jsonResponse.get("visibility");
-        if(visibility != null)
-            setVisibilityForCity(cityAnswerModel, visibility.toString());
-
+        if(jsonResponse.has("visibility") && !jsonResponse.isNull("visibility"))
+            cityAnswerModel.setVisibility(jsonResponse.get("visibility").toString());
         return cityAnswerModel;
-    }
-
-    private void setVisibilityForCity(CityAnswerModel cityAnswerModel, String visibility){
-        try {
-            cityAnswerModel.setVisibility(visibility);
-        } catch (JSONException e) {
-            cityAnswerModel.setVisibility("unknown");
-            e.printStackTrace();
-        }
     }
 
     private String getWeatherConnection(String cityId){

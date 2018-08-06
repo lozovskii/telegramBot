@@ -2,8 +2,6 @@ package com.bot.service.Impl;
 
 import com.bot.service.WeatherService;
 import com.bot.util.NoSuchCityException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;

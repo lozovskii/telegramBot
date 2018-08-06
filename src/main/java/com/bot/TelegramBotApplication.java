@@ -10,15 +10,10 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 
 @SpringBootApplication
-public class TelegramBotApplication  {//implements CommandLineRunner
+public class TelegramBotApplication {
 
     @Autowired
     private Bot bot;
-
-//    @Override
-//    public void run(String... args) throws Exception {
-//
-//    }
 
     @Bean
     CommandLineRunner runBot(){
