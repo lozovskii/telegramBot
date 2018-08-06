@@ -37,15 +37,18 @@ public class WeatherRequestServiceImpl implements WeatherRequestService {
                 .humidity(jsonResponse.getJSONObject("main").get("humidity").toString())
                 .windSpeed(jsonResponse.getJSONObject("wind").get("speed").toString())
                 .build();
-        setVisibilityForCity(cityAnswerModel, jsonResponse);
+        Object visibility = jsonResponse.get("visibility");
+        if (visibility != null) {
+            setVisibilityForCity(cityAnswerModel, visibility.toString());
+        }
         return cityAnswerModel;
     }
 
-    private void setVisibilityForCity(CityAnswerModel cityAnswerModel, JSONObject jsonResponse){
+    private void setVisibilityForCity(CityAnswerModel cityAnswerModel, String visibility){
         try {
-            cityAnswerModel.setVisibility(jsonResponse.get("visibility").toString());
+            cityAnswerModel.setVisibility(visibility);
         } catch (JSONException e) {
-//            cityAnswerModel.setVisibility("unknown");
+            cityAnswerModel.setVisibility("unknown");
             e.printStackTrace();
         }
     }
