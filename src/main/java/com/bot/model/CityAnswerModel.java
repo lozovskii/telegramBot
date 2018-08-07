@@ -80,10 +80,10 @@ public class CityAnswerModel {
         return "" +
                 name + ": " +
                 description + "\n" +
-                "temperature = '" + temp + '\'' + "\n" +
-                "pressure = '" + pressure + '\'' + "\n" +
-                "humidity = '" + humidity + '\'' + "\n" +
-                "visibility = '" + visibility + '\'' + "\n" +
-                "windSpeed = '" + windSpeed + '\'';
+                "Temperature = " + temp + "\n" +
+                "Pressure = " + pressure + "\n" +
+                "Humidity = " + humidity + "\n" +
+                "Visibility = " + visibility + "\n" +
+                "Wind Speed = " + windSpeed + ';';
     }
 }
