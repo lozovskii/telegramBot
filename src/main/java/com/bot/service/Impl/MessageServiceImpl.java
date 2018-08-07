@@ -4,7 +4,7 @@ import com.bot.model.CityAnswerModel;
 import com.bot.service.MessageService;
 import com.bot.service.WeatherRequestService;
 import com.bot.service.WeatherService;
-import com.bot.util.NoSuchCityException;
+import com.bot.util.exception.NoSuchCityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

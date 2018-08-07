@@ -1,6 +1,6 @@
 package com.bot.service;
 
-import com.bot.util.NoSuchCityException;
+import com.bot.util.exception.NoSuchCityException;
 
 public interface WeatherService {
 

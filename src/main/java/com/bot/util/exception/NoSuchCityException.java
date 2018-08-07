@@ -1,4 +1,4 @@
-package com.bot.util;
+package com.bot.util.exception;
 
 public class NoSuchCityException extends RuntimeException {
 

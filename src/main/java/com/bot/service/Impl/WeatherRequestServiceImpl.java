@@ -2,7 +2,7 @@ package com.bot.service.Impl;
 
 import com.bot.model.CityAnswerModel;
 import com.bot.service.WeatherRequestService;
-import com.bot.util.NoConnection;
+import com.bot.util.exception.NoConnection;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
