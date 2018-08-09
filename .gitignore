@@ -3,6 +3,7 @@
 src/main/resources/data/test.txt
 src/main/resources/data/war_and_peace.txt
 src/main/resources/application-test.properties
+src/main/java/com/bot/util/MongoConnection.java
 
 ### STS ###
 .apt_generated

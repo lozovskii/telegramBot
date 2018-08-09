@@ -101,6 +101,12 @@
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!--emoji-->
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>3.1.3</version>
+        </dependency>
         <!--fix java.lang.NoSuchMethodError: com.google.common.base.Stopwatch.elapsedMillis()J-->
         <dependency>
             <groupId>com.google.guava</groupId>
