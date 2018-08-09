@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
 
-    private final String TOP15_CRYPT_CURR_URL = "https://api.coinmarketcap.com/v2/ticker/?limit=15&sort=rank";
+    private final String TOP15_CRYPT_CURR_URL = "https://api.coinmarketcap.com/v2/ticker/?limit=15";
 
     @Autowired
     private WebService webService;
@@ -53,6 +53,7 @@ public class CurrencyServiceImpl implements CurrencyService {
                     .build();
             responseCurrencyList.add(cryptoCurrencyModel);
         }
+        responseCurrencyList.sort(Comparator.comparingInt((CryptoCurrencyModel x) -> Integer.parseInt(x.getRank())));
         return responseCurrencyList;
     }
 }
