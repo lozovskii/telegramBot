@@ -3,7 +3,6 @@ package com.bot.service.Impl;
 import com.bot.model.CityAnswerModel;
 import com.bot.service.CurrencyService;
 import com.bot.service.MessageService;
-import com.bot.service.WeatherRequestService;
 import com.bot.service.WeatherService;
 import com.bot.util.exception.NoSuchCityException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private WeatherService weatherService;
     @Autowired
-    private WeatherRequestService weatherRequestService;
-    @Autowired
     private CurrencyService currencyService;
 
     @Override
@@ -35,16 +32,15 @@ public class MessageServiceImpl implements MessageService {
             case "what is your name?":
                 return "My name test503503Bot";
             case "curr":
-                return currencyService.getTopCryptoCurrency().toString();
+                return parseCryptoCurrency(currencyService.getTopCryptoCurrency().toString());
             default:
-                return currencyService.getTopCryptoCurrency().toString();
-//                try {
-//                    String cityId = weatherService.getCityId(phrase);
-//                    CityAnswerModel weather = weatherRequestService.getWeather(cityId);
-//                    return parseWeather(weather.toString());
-//                } catch (NoSuchCityException e) {
-//                    return "Sorry, but i don't understand...";
-//                }
+                try {
+                    String cityId = weatherService.getCityId(phrase);
+                    CityAnswerModel weather = weatherService.getWeather(cityId);
+                    return parseWeather(weather.toString());
+                } catch (NoSuchCityException e) {
+                    return "Sorry, but i don't understand...";
+                }
         }
     }
 
@@ -52,6 +48,11 @@ public class MessageServiceImpl implements MessageService {
         return Arrays.stream(weather.split("\\n"))
                 .filter(x -> !x.contains("visibility = 'null'"))
                 .collect(Collectors.joining("\n"));
+    }
+
+    private String parseCryptoCurrency(String cryptoCurrency){
+        String substring = cryptoCurrency.substring(1, cryptoCurrency.length() - 1);
+        return String.join("\n", substring.split(", "));
     }
 
 }
