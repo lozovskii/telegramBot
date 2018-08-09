@@ -19,15 +19,14 @@ import java.util.List;
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
 
-    private final String TOP_CRYPT_CURR_URL = "https://api.coinmarketcap.com/v2/ticker/?limit=";
-    private final String LIMIT_TOP = "15";
+    private final String TOP15_CRYPT_CURR_URL = "https://api.coinmarketcap.com/v2/ticker/?limit=15&sort=rank";
 
     @Autowired
     private WebService webService;
 
     @Override
     public List<CryptoCurrencyModel> getTopCryptoCurrency() throws MalformedURLException {
-        String response = webService.getResponse(new URL(TOP_CRYPT_CURR_URL + LIMIT_TOP));
+        String response = webService.getResponse(new URL(TOP15_CRYPT_CURR_URL));
         JSONObject jsonResponse = new JSONObject(response);
         JSONObject dataNode = jsonResponse.getJSONObject("data");
         Iterator dataNodeKyes = dataNode.keys();
@@ -54,7 +53,6 @@ public class CurrencyServiceImpl implements CurrencyService {
                     .build();
             responseCurrencyList.add(cryptoCurrencyModel);
         }
-        responseCurrencyList.sort(Comparator.comparingInt((CryptoCurrencyModel x) -> Integer.parseInt(x.getRank())));
         return responseCurrencyList;
     }
 }
