@@ -7,6 +7,6 @@ import java.net.MalformedURLException;
 
 public interface WeatherRequestService {
 
-    CityAnswerModel getWeather(String cityId) throws IOException;
+    CityAnswerModel getWeather(String cityId) throws MalformedURLException;
 
 }

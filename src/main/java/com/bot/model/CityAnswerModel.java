@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class CityAnswerModel {
 
-    private String name;
+    private final String name;
     private String description;
     private String temp;
     private String pressure;
@@ -17,7 +17,7 @@ public class CityAnswerModel {
 
     public static class CityAnswerModelBuilder{
 
-        private String name;
+        private final String name;
         private String description;
         private String temp;
         private String pressure;
