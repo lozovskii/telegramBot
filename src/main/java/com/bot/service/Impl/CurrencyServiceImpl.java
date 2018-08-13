@@ -1,8 +1,10 @@
 package com.bot.service.Impl;
 
 import com.bot.model.CryptoCurrencyModel;
+import com.bot.model.CurrencyModel;
 import com.bot.service.CurrencyService;
 import com.bot.service.WebService;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.List;
 public class CurrencyServiceImpl implements CurrencyService {
 
     private final String TOP15_CRYPT_CURR_URL = "https://api.coinmarketcap.com/v2/ticker/?limit=15";
+    private final String CURRENCY_INFO = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
 
     @Autowired
     private WebService webService;
@@ -56,4 +59,23 @@ public class CurrencyServiceImpl implements CurrencyService {
         responseCurrencyList.sort(Comparator.comparingInt((CryptoCurrencyModel x) -> Integer.parseInt(x.getRank())));
         return responseCurrencyList;
     }
+
+    @Override
+    public List<CurrencyModel> getCurrencyInfo() throws MalformedURLException{
+        String response = webService.getResponse(new URL(CURRENCY_INFO));
+        JSONArray json = new JSONArray(response);
+        Iterator<Object> iterator = json.iterator();
+        List<CurrencyModel> currencies = new ArrayList<>();
+        while(iterator.hasNext()){
+            JSONObject next = (JSONObject) iterator.next();
+            CurrencyModel currencyModel = new CurrencyModel();
+            currencyModel.setCcy(next.get("ccy").toString());
+            currencyModel.setBaseCurr(next.get("baseCurr").toString());
+            currencyModel.setBuy(next.get("buy").toString());
+            currencyModel.setSale(next.get("Sale").toString());
+            currencies.add(currencyModel);
+        }
+        return currencies;
+    }
+
 }

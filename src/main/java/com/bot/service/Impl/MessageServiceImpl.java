@@ -31,8 +31,10 @@ public class MessageServiceImpl implements MessageService {
                 return "Bonjour!";
             case "what is your name?":
                 return "My name test503503Bot";
-            case "curr":
+            case "ccurr":
                 return parseCryptoCurrency(currencyService.getTopCryptoCurrency().toString());
+            case "curr":
+                return parseCryptoCurrency(currencyService.getCurrencyInfo().toString());
             default:
                 try {
                     String cityId = weatherService.getCityId(phrase);
