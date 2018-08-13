@@ -60,6 +60,27 @@ public class WeatherServiceImpl implements WeatherService {
     @Override
     public CityAnswerModel getWeather(String cityId) throws MalformedURLException {
         URL url = buildURL(cityId);
+        return parseResponse(url);
+    }
+
+    @Override
+    public CityAnswerModel getWeatherByCoord(String phrase) throws MalformedURLException {
+        String[] coords = parseCoord(phrase);
+        URL url = buildURLbyCoord(coords[0], coords[1]);
+        return parseResponse(url);
+    }
+
+    private URL buildURLbyCoord(String lat, String lon) throws MalformedURLException {
+        return new URL("api.openweathermap.org/data/2.5/weather?lat=" + lat +
+                "lon=" + lon + "&units=metric&appid=" + weatherToken);
+    }
+
+    private URL buildURL(String cityId) throws MalformedURLException {
+        return new URL("http://api.openweathermap.org/data/2.5/weather?id=" + cityId +
+                "&units=metric&appid=" + weatherToken);
+    }
+
+    private CityAnswerModel parseResponse(URL url){
         String response = webService.getResponse(url);
         JSONObject jsonResponse = new JSONObject(response);
         CityAnswerModel cityAnswerModel = new CityAnswerModel
@@ -78,20 +99,19 @@ public class WeatherServiceImpl implements WeatherService {
         return cityAnswerModel;
     }
 
-    private URL buildURL(String cityId) throws MalformedURLException {
-        return new URL("http://api.openweathermap.org/data/2.5/weather?id=" + cityId +
-                "&units=metric&appid=" + weatherToken);
-    }
-
-    private String makeCorrectCityNameFormat(String city){
+    private String makeCorrectCityNameFormat(String city) {
         return Arrays.stream(city.split(" "))
                 .map(i -> i.substring(0, 1).toUpperCase() + i.substring(1))
                 .collect(Collectors.joining(" "));
-        }
+    }
 
-    private String parseDate(String unixDate){
-        Date date = new Date(Long.valueOf(unixDate)*1000L);
+    private String parseDate(String unixDate) {
+        Date date = new Date(Long.valueOf(unixDate) * 1000L);
         SimpleDateFormat jdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         return jdf.format(date);
+    }
+
+    private String[] parseCoord(String phrase) {
+        return phrase.substring(phrase.indexOf("=") + 1, phrase.indexOf("&")).split(",");
     }
 }

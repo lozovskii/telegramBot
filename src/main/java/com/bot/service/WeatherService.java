@@ -11,4 +11,6 @@ public interface WeatherService {
 
     CityAnswerModel getWeather(String cityId) throws MalformedURLException;
 
+    CityAnswerModel getWeatherByCoord(String phrase) throws MalformedURLException;
+
 }

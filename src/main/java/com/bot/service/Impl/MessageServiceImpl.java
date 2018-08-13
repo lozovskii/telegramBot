@@ -41,6 +41,9 @@ public class MessageServiceImpl implements MessageService {
             case "help":
                 return HELP;
             default:
+                if(phrase.startsWith("https://")){
+                    weatherService.getWeatherByCoord(phrase);
+                }
                 try {
                     String cityId = weatherService.getCityId(phrase);
                     CityAnswerModel weather = weatherService.getWeather(cityId);
