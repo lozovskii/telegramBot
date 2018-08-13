@@ -72,7 +72,7 @@ public class CurrencyServiceImpl implements CurrencyService {
             currencyModel.setCcy(next.get("ccy").toString());
             currencyModel.setBaseCcy(next.get("base_ccy").toString());
             currencyModel.setBuy(next.get("buy").toString());
-            currencyModel.setSale(next.get("Sale").toString());
+            currencyModel.setSale(next.get("sale").toString());
             currencies.add(currencyModel);
         }
         return currencies;
