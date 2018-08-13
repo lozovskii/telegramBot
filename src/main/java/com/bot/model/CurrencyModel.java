@@ -16,6 +16,6 @@ public class CurrencyModel {
 
     @Override
     public String toString() {
-        return ccy + " - "+ buy + " " + baseCcy + " " + sale + " " + baseCcy;
+        return "Privat Bank: \n" + ccy + " - "+ buy + " " + baseCcy + " " + sale + " " + baseCcy;
     }
 }
