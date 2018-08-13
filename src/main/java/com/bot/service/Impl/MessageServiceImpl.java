@@ -6,6 +6,7 @@ import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
 import com.bot.util.exception.NoSuchCityException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.util.stream.Collectors;
 @Service
 public class MessageServiceImpl implements MessageService {
 
+    @Value("${help}")
+    private String HELP;
     @Autowired
     private WeatherService weatherService;
     @Autowired
@@ -35,6 +38,8 @@ public class MessageServiceImpl implements MessageService {
                 return parseCryptoCurrency(currencyService.getTopCryptoCurrency().toString());
             case "curr":
                 return parseCryptoCurrency(currencyService.getCurrencyInfo().toString());
+            case "help":
+                return HELP;
             default:
                 try {
                     String cityId = weatherService.getCityId(phrase);
