@@ -70,7 +70,6 @@ public class WeatherServiceImpl implements WeatherService {
                 .temp(jsonResponse.getJSONObject("main").get("temp").toString())
                 .pressure(jsonResponse.getJSONObject("main").get("pressure").toString())
                 .humidity(jsonResponse.getJSONObject("main").get("humidity").toString())
-                .date(parseDate(jsonResponse.get("dt").toString()))
                 .country(jsonResponse.getJSONObject("sys").get("country").toString())
                 .windSpeed(jsonResponse.getJSONObject("wind").get("speed").toString())
                 .build();
