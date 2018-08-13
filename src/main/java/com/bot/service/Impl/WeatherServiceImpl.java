@@ -4,6 +4,8 @@ import com.bot.model.CityAnswerModel;
 import com.bot.service.WeatherService;
 import com.bot.service.WebService;
 import com.bot.util.exception.NoSuchCityException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @PropertySource("classpath:weather.properties")
 public class WeatherServiceImpl implements WeatherService {
+    private static final Logger log = LogManager.getLogger("WeatherServiceImpl");
     private final Integer CITY_ID_INDEX = 2;
     private final Integer GETTING_FULL_SUBJSON = 0;
 
@@ -66,6 +69,7 @@ public class WeatherServiceImpl implements WeatherService {
     @Override
     public CityAnswerModel getWeatherByCoord(String phrase) throws MalformedURLException {
         String[] coords = parseCoord(phrase);
+        log.debug("coords: " + Arrays.toString(coords));
         URL url = buildURLbyCoord(coords[0], coords[1]);
         return parseResponse(url);
     }
