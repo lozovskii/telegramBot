@@ -10,12 +10,12 @@ import lombok.*;
 public class CurrencyModel {
 
     private String ccy;
-    private String baseCurr;
+    private String baseCcy;
     private String buy;
     private String sale;
 
     @Override
     public String toString() {
-        return ccy + " - "+ buy + " " + baseCurr + " " + sale + " " + baseCurr;
+        return ccy + " - "+ buy + " " + baseCcy + " " + sale + " " + baseCcy;
     }
 }

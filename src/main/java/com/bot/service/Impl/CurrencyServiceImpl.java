@@ -70,7 +70,7 @@ public class CurrencyServiceImpl implements CurrencyService {
             JSONObject next = (JSONObject) iterator.next();
             CurrencyModel currencyModel = new CurrencyModel();
             currencyModel.setCcy(next.get("ccy").toString());
-            currencyModel.setBaseCurr(next.get("baseCurr").toString());
+            currencyModel.setBaseCcy(next.get("base_ccy").toString());
             currencyModel.setBuy(next.get("buy").toString());
             currencyModel.setSale(next.get("Sale").toString());
             currencies.add(currencyModel);
