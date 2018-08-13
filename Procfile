@@ -1,1 +1,1 @@
-worker: sh target/bin/Bot --spring.profiles.active=$PROFILE $JAVA_OPTS
+worker: sh target/bin/Bot --spring.profiles.active=$PROFILE $JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,address=9090,suspend=n -jar target/<.jar file>
