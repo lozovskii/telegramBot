@@ -28,7 +28,6 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-@PropertySource("classpath:weather.properties")
 public class WeatherServiceImpl implements WeatherService {
     private final Integer CITY_ID_INDEX = 2;
     private final Integer GETTING_FULL_SUBJSON = 0;
