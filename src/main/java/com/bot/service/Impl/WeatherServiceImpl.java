@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -68,6 +70,8 @@ public class WeatherServiceImpl implements WeatherService {
                 .temp(jsonResponse.getJSONObject("main").get("temp").toString())
                 .pressure(jsonResponse.getJSONObject("main").get("pressure").toString())
                 .humidity(jsonResponse.getJSONObject("main").get("humidity").toString())
+                .date(parseDate(jsonResponse.get("dt").toString()))
+                .country(jsonResponse.getJSONObject("sys").get("country").toString())
                 .windSpeed(jsonResponse.getJSONObject("wind").get("speed").toString())
                 .build();
         if (jsonResponse.has("visibility") && !jsonResponse.isNull("visibility"))
@@ -86,4 +90,9 @@ public class WeatherServiceImpl implements WeatherService {
                 .collect(Collectors.joining(" "));
         }
 
+    private String parseDate(String unixDate){
+        Date date = new Date(Long.valueOf(unixDate)*1000L);
+        SimpleDateFormat jdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        return jdf.format(date);
+    }
 }

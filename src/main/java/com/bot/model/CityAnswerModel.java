@@ -13,6 +13,8 @@ public class CityAnswerModel {
     private String pressure;
     private String humidity;
     private String visibility;
+    private String date;
+    private String country;
     private String windSpeed;
 
     public static class CityAnswerModelBuilder{
@@ -23,6 +25,8 @@ public class CityAnswerModel {
         private String pressure;
         private String humidity;
         private String visibility;
+        private String date;
+        private String country;
         private String windSpeed;
 
         public CityAnswerModelBuilder(String name){
@@ -54,6 +58,16 @@ public class CityAnswerModel {
             return this;
         }
 
+        public CityAnswerModelBuilder date(String date){
+            this.date = date;
+            return this;
+        }
+
+        public CityAnswerModelBuilder country(String country){
+            this.country = country;
+            return this;
+        }
+
         public CityAnswerModelBuilder windSpeed(String windSpeed){
             this.windSpeed = windSpeed;
             return this;
@@ -72,14 +86,17 @@ public class CityAnswerModel {
         this.pressure = builder.pressure;
         this.humidity = builder.humidity;
         this.visibility = builder.visibility;
+        this.date = builder.date;
+        this.country = builder.country;
         this.windSpeed = builder.windSpeed;
     }
 
     @Override
     public String toString() {
         return "" +
-                name + ": " +
+                name + " (" + country + "): " +
                 description + "\n" +
+                "Date: " + date + "\n" +
                 "Temperature = " + temp + "\n" +
                 "Pressure = " + pressure + "\n" +
                 "Humidity = " + humidity + "\n" +
