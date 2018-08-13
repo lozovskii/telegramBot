@@ -62,25 +62,17 @@ public class WeatherServiceImpl implements WeatherService {
 
     @Override
     public CityAnswerModel getWeather(String cityId) throws MalformedURLException {
-        URL url = buildURL(cityId);
+        URL url = new URL("http://api.openweathermap.org/data/2.5/weather?id=" + cityId +
+                "&units=metric&appid=" + weatherToken);
         return parseResponse(url);
     }
 
     @Override
     public CityAnswerModel getWeatherByCoord(Message msg) throws MalformedURLException {
         Location location = msg.getLocation();
-        URL url = buildURLbyCoord(location.getLatitude().toString(), location.getLongitude().toString());
+        URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + location.getLatitude().toString() +
+                "&lon=" + location.getLongitude().toString() + "&units=metric&appid=" + weatherToken);
         return parseResponse(url);
-    }
-
-    private URL buildURLbyCoord(String lat, String lon) throws MalformedURLException {
-        return new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + lat +
-                "&lon=" + lon + "&units=metric&appid=" + weatherToken);
-    }
-
-    private URL buildURL(String cityId) throws MalformedURLException {
-        return new URL("http://api.openweathermap.org/data/2.5/weather?id=" + cityId +
-                "&units=metric&appid=" + weatherToken);
     }
 
     private CityAnswerModel parseResponse(URL url) {
@@ -108,13 +100,10 @@ public class WeatherServiceImpl implements WeatherService {
                 .collect(Collectors.joining(" "));
     }
 
-    private String parseDate(String unixDate) {
+    private String parseDateFromUnixFormat(String unixDate) {
         Date date = new Date(Long.valueOf(unixDate) * 1000L);
         SimpleDateFormat jdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         return jdf.format(date);
     }
 
-    private String[] parseCoord(String phrase) {
-        return phrase.substring(phrase.indexOf("=") + 1, phrase.indexOf("&")).split(",");
-    }
 }
