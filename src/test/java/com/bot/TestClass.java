@@ -129,13 +129,6 @@ public class TestClass {
 
     @Ignore
     @Test
-    public void getAnswer() throws IOException {
-        String kiev = messageService.getAnswer("Kiev");
-        log.debug(kiev);
-    }
-
-    @Ignore
-    @Test
     public void testParsCryptoCurrency() throws JSONException {
         String response = "{\n" +
                 "    \"data\": {\n" +

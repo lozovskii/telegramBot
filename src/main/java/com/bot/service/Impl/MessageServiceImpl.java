@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class MessageServiceImpl implements MessageService {
-    private static final Logger log = LogManager.getLogger("MessageServiceImpl");
 
     @Value("${help}")
     private String HELP;
@@ -27,8 +27,11 @@ public class MessageServiceImpl implements MessageService {
     private CurrencyService currencyService;
 
     @Override
-    public String getAnswer(String phrase) throws IOException {
-        log.debug("Input message: " + phrase);
+    public String getAnswer(Message msg) throws IOException {
+        String phrase = msg.getText();
+        if (msg.getLocation() != null) {
+            return weatherService.getWeatherByCoord(msg).toString();
+        }
         switch (phrase.toLowerCase()) {
             case "/start":
                 return "Hello, world! This is simple bot!";
@@ -45,9 +48,6 @@ public class MessageServiceImpl implements MessageService {
             case "help":
                 return HELP;
             default:
-                if(phrase.startsWith("https://")){
-                    weatherService.getWeatherByCoord(phrase);
-                }
                 try {
                     String cityId = weatherService.getCityId(phrase);
                     CityAnswerModel weather = weatherService.getWeather(cityId);
@@ -64,7 +64,7 @@ public class MessageServiceImpl implements MessageService {
                 .collect(Collectors.joining("\n"));
     }
 
-    private String parseCryptoCurrency(String cryptoCurrency){
+    private String parseCryptoCurrency(String cryptoCurrency) {
         String substring = cryptoCurrency.substring(1, cryptoCurrency.length() - 1);
         return String.join("\n", substring.split(", "));
     }

@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.Location;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,7 +30,6 @@ import java.util.stream.Collectors;
 @Service
 @PropertySource("classpath:weather.properties")
 public class WeatherServiceImpl implements WeatherService {
-    private static final Logger log = LogManager.getLogger("WeatherServiceImpl");
     private final Integer CITY_ID_INDEX = 2;
     private final Integer GETTING_FULL_SUBJSON = 0;
 
@@ -67,16 +68,15 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public CityAnswerModel getWeatherByCoord(String phrase) throws MalformedURLException {
-        String[] coords = parseCoord(phrase);
-        log.debug("coords: " + Arrays.toString(coords));
-        URL url = buildURLbyCoord(coords[0], coords[1]);
+    public CityAnswerModel getWeatherByCoord(Message msg) throws MalformedURLException {
+        Location location = msg.getLocation();
+        URL url = buildURLbyCoord(location.getLatitude().toString(), location.getLongitude().toString());
         return parseResponse(url);
     }
 
     private URL buildURLbyCoord(String lat, String lon) throws MalformedURLException {
-        return new URL("api.openweathermap.org/data/2.5/weather?lat=" + lat +
-                "lon=" + lon + "&units=metric&appid=" + weatherToken);
+        return new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + lat +
+                "&lon=" + lon + "&units=metric&appid=" + weatherToken);
     }
 
     private URL buildURL(String cityId) throws MalformedURLException {
@@ -84,7 +84,7 @@ public class WeatherServiceImpl implements WeatherService {
                 "&units=metric&appid=" + weatherToken);
     }
 
-    private CityAnswerModel parseResponse(URL url){
+    private CityAnswerModel parseResponse(URL url) {
         String response = webService.getResponse(url);
         JSONObject jsonResponse = new JSONObject(response);
         CityAnswerModel cityAnswerModel = new CityAnswerModel

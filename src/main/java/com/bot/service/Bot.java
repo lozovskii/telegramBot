@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -31,8 +32,7 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message msg = update.getMessage();
-        String text = msg.getText();
-        String answer = getAnswer(text);
+        String answer = getAnswer(msg);
         sendMsg(msg, answer);
     }
 
@@ -57,11 +57,11 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private String getAnswer(String text){
+    private String getAnswer(Message message){
         try {
-            return messageService.getAnswer(text);
+            return messageService.getAnswer(message);
         } catch (IOException e) {
-            throw new NoAnswerException("Failed to get answer for text: " + text, e);
+            throw new NoAnswerException("Failed to get answer for text: " + message.getText(), e);
         }
     }
 }
