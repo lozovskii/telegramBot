@@ -34,21 +34,25 @@ public class MessageServiceImpl implements MessageService {
             return weatherService.getWeatherByCoord(msg).toString();
         }
         String quickAnswer = dbRepository.searchQuickAnswer(phrase);
-        switch (quickAnswer) {
-            case "/start":
-                return "Hello, world! This is simple bot!";
-            case "ccurr":
-                return parseCryptoCurrency(currencyService.getTopCryptoCurrency().toString());
-            case "curr":
-                return parseCryptoCurrency(currencyService.getCurrencyInfo().toString());
-            default:
-                try {
-                    String cityId = weatherService.getCityId(phrase);
-                    CityAnswerModel weather = weatherService.getWeather(cityId);
-                    return parseWeather(weather.toString());
-                } catch (NoSuchCityException e) {
-                    return "Sorry, but i don't understand...";
-                }
+        if (quickAnswer != null || !quickAnswer.equals("")) {
+            return quickAnswer;
+        } else {
+            switch (quickAnswer) {
+                case "/start":
+                    return "Hello, world! This is simple bot!";
+                case "ccurr":
+                    return parseCryptoCurrency(currencyService.getTopCryptoCurrency().toString());
+                case "curr":
+                    return parseCryptoCurrency(currencyService.getCurrencyInfo().toString());
+                default:
+                    try {
+                        String cityId = weatherService.getCityId(phrase);
+                        CityAnswerModel weather = weatherService.getWeather(cityId);
+                        return parseWeather(weather.toString());
+                    } catch (NoSuchCityException e) {
+                        return "Sorry, but i don't understand...";
+                    }
+            }
         }
     }
 
