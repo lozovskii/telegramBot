@@ -1,6 +1,7 @@
 package com.bot.repository.Impl;
 
 import com.bot.repository.DBRepository;
+import com.bot.util.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,6 +21,7 @@ public class DBRepositoryPostgresImpl implements DBRepository {
 
     @Autowired
     private NamedParameterJdbcOperations jdbcTemplate;
+    private QueryService queryService;
 
     @Override
     public void addToDB(Contact contact, Long chatId) {
@@ -33,9 +35,9 @@ public class DBRepositoryPostgresImpl implements DBRepository {
 
     @Override
     public String searchEmoji(String weatherMood) {
-        String sql = "SELECT emoji FROM weather_mood WHERE description =:phrase";
+        String emojiQuery = queryService.getQuery("getEmoji");
         SqlParameterSource source = new MapSqlParameterSource("phrase", weatherMood);
-        List emoji = jdbcTemplate.query(sql, source, new EmojiMapper());
+        List emoji = jdbcTemplate.query(emojiQuery, source, new EmojiMapper());
         return emoji.get(0).toString();
     }
 
