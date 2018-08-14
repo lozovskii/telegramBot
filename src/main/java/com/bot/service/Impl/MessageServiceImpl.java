@@ -34,10 +34,10 @@ public class MessageServiceImpl implements MessageService {
             return weatherService.getWeatherByCoord(msg).toString();
         }
         String quickAnswer = dbRepository.searchQuickAnswer(phrase);
-        if (quickAnswer != null || !quickAnswer.equals("")) {
+        if (quickAnswer != null) {
             return quickAnswer;
         } else {
-            switch (quickAnswer) {
+            switch (phrase) {
                 case "/start":
                     return "Hello, world! This is simple bot!";
                 case "ccurr":
