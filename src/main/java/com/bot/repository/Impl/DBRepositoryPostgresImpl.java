@@ -28,7 +28,11 @@ public class DBRepositoryPostgresImpl implements DBRepository {
     public String searchQuickAnswer(String phrase) {
         String quickAnswerQuery = queryService.getQuery("getQuickAnswer");
         SqlParameterSource source = new MapSqlParameterSource("phrase", phrase);
-        return jdbcTemplate.queryForObject(quickAnswerQuery, source, (resultSet, i) -> resultSet.getString("answer"));
+        String answer = jdbcTemplate.queryForObject(quickAnswerQuery, source, (resultSet, i) -> resultSet.getString("answer"));
+        if(answer == null){
+            return null;
+        }
+        return answer;
     }
 
     @Override
