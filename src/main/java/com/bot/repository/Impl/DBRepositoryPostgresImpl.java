@@ -28,14 +28,14 @@ public class DBRepositoryPostgresImpl implements DBRepository {
     public String searchQuickAnswer(String phrase) {
         String quickAnswerQuery = queryService.getQuery("getQuickAnswer");
         SqlParameterSource source = new MapSqlParameterSource("phrase", phrase);
-        return jdbcTemplate.queryForObject(quickAnswerQuery, source, String.class);
+        return jdbcTemplate.queryForObject(quickAnswerQuery, source, (resultSet, i) -> resultSet.getString("answer"));
     }
 
     @Override
     public String searchEmoji(String weatherMood) {
         String emojiQuery = queryService.getQuery("getEmoji");
         SqlParameterSource source = new MapSqlParameterSource("description", weatherMood);
-        return jdbcTemplate.queryForObject(emojiQuery, source, String.class);
+        return jdbcTemplate.queryForObject(emojiQuery, source, (resultSet, i) -> resultSet.getString("emoji"));
     }
 
 }
