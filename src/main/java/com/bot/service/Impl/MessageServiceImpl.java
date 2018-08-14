@@ -60,7 +60,7 @@ public class MessageServiceImpl implements MessageService {
 
     private String parseWeather(String weather) {
         return Arrays.stream(weather.split("\\n"))
-                .filter(x -> !x.contains("visibility = 'null'"))
+                .filter(x -> !x.contains("Visibility = 'null'"))
                 .collect(Collectors.joining("\n"));
     }
 
