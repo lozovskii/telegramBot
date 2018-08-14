@@ -35,8 +35,6 @@ public class DBRepositoryPostgresImpl implements DBRepository {
     public String searchEmoji(String weatherMood) {
         String emojiQuery = queryService.getQuery("getEmoji");
         SqlParameterSource source = new MapSqlParameterSource("description", weatherMood);
-        System.out.println(emojiQuery);
-        System.out.println(source);
         return jdbcTemplate.queryForObject(emojiQuery, source, String.class);
     }
 
