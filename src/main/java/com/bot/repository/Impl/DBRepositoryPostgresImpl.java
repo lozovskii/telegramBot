@@ -22,8 +22,15 @@ public class DBRepositoryPostgresImpl implements DBRepository {
     private QueryService queryService;
 
     @Override
-    public void addToDB(Contact contact, Long chatId) {
-
+    public void addUserInfo(Contact contact, Long chatId) {
+        String addUserInfo = queryService.getQuery("saveUserInfo");
+        SqlParameterSource source = new MapSqlParameterSource("user_id",contact.getUserID())
+                .addValue("chat_id", chatId)
+                .addValue("phone_number", contact.getPhoneNumber())
+                .addValue("first_name", contact.getFirstName())
+                .addValue("last_name", contact.getLastName())
+                .addValue("v_card", contact.getVCard());
+        jdbcTemplate.query(addUserInfo, source, (resultSet, i) -> null);
     }
 
     @Override
