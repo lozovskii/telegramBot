@@ -3,6 +3,7 @@ package com.bot.service.Impl;
 import com.bot.model.CityAnswerModel;
 import com.bot.repository.DBRepository;
 import com.bot.service.CurrencyService;
+import com.bot.service.DBService;
 import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
 import com.bot.util.exception.NoSuchCityException;
@@ -25,7 +26,7 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private CurrencyService currencyService;
     @Autowired
-    private DBRepository dbRepository;
+    private DBService dbService;
 
     @Override
     public String getAnswer(Message msg) throws IOException {
@@ -33,7 +34,7 @@ public class MessageServiceImpl implements MessageService {
         if (msg.getLocation() != null) {
             return weatherService.getWeatherByCoord(msg).toString();
         }
-        String quickAnswer = dbRepository.searchQuickAnswer(phrase);
+        String quickAnswer = dbService.searchAnswer(phrase);
         if (quickAnswer != null) {
             return quickAnswer;
         } else {

@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     public void addUserInfo(Message msg) {
         Long chatId = msg.getChatId();
         Contact contact = msg.getContact();
-        dbService.addToDB(contact, chatId);
+        dbService.addUserInfo(contact, chatId);
     }
 
 }

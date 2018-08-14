@@ -15,8 +15,8 @@ public class DBServicePostgresImpl implements DBService {
     private DBRepository dbRepository;
 
     @Override
-    public void addToDB(Contact contact, Long chatID) {
-        dbRepository.addToDB(contact, chatID);
+    public void addUserInfo(Contact contact, Long chatID) {
+        dbRepository.addUserInfo(contact, chatID);
     }
 
     @Override
@@ -24,5 +24,9 @@ public class DBServicePostgresImpl implements DBService {
         return dbRepository.searchQuickAnswer(phrase);
     }
 
+    @Override
+    public String searchEmoji(String weatherMood) {
+        return dbRepository.searchEmoji(weatherMood);
+    }
 
 }

@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Contact;
 @Repository
 public class DBRepositoryMongoImpl implements DBRepository {
     @Override
-    public void addToDB(Contact contact, Long chatId) {
+    public void addUserInfo(Contact contact, Long chatId) {
         MongoDatabase db = new MongoDataBase().getDataBase();
         MongoCollection<Document> collection = db.getCollection("user_info");
         Document user = new Document("userId", contact.getUserID())

@@ -15,13 +15,18 @@ public class DBServiceMongoImpl implements DBService {
     private DBRepository dbRepository;
 
     @Override
-    public void addToDB(Contact contact, Long chatId) {
-        dbRepository.addToDB(contact, chatId);
+    public void addUserInfo(Contact contact, Long chatId) {
+        dbRepository.addUserInfo(contact, chatId);
     }
 
     @Override
     public String searchAnswer(String phrase) {
         return dbRepository.searchQuickAnswer(phrase);
+    }
+
+    @Override
+    public String searchEmoji(String weatherMood) {
+        return dbRepository.searchEmoji(weatherMood);
     }
 
 }
