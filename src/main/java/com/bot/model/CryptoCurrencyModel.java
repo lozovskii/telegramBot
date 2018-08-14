@@ -47,7 +47,7 @@ public class CryptoCurrencyModel {
         }
     }
 
-    public CryptoCurrencyModel(CryptoCurrencyModelBuilder builder) {
+    private CryptoCurrencyModel(CryptoCurrencyModelBuilder builder) {
         this.name = builder.name;
         this.price = builder.price;
         this.currency = builder.currency;
