@@ -29,4 +29,9 @@ public class DBRepositoryMongoImpl implements DBRepository {
     public String searchAnswer(String phrase) {
         return null;
     }
+
+    @Override
+    public String searchEmoji(String weatherMood) {
+        return null;
+    }
 }

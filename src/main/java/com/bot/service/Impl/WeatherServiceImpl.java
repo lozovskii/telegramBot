@@ -1,11 +1,11 @@
 package com.bot.service.Impl;
 
 import com.bot.model.CityAnswerModel;
+import com.bot.repository.DBRepository;
 import com.bot.service.WeatherService;
 import com.bot.service.WebService;
 import com.bot.util.exception.NoSuchCityException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.vdurmont.emoji.EmojiParser;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
@@ -14,7 +14,6 @@ import org.apache.spark.sql.SQLContext;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -31,6 +30,9 @@ import java.util.stream.Collectors;
 public class WeatherServiceImpl implements WeatherService {
     private final Integer CITY_ID_INDEX = 2;
     private final Integer GETTING_FULL_SUBJSON = 0;
+
+    @Autowired
+    private DBRepository dbRepository;
 
     @Autowired
     private WebService webService;
@@ -80,9 +82,9 @@ public class WeatherServiceImpl implements WeatherService {
         JSONObject jsonResponse = new JSONObject(response);
         CityAnswerModel cityAnswerModel = new CityAnswerModel
                 .CityAnswerModelBuilder(jsonResponse.get("name").toString())
-                .description(jsonResponse.getJSONArray("weather")
+                .description(addEmoji(jsonResponse.getJSONArray("weather")
                         .getJSONObject(GETTING_FULL_SUBJSON)
-                        .get("description").toString())
+                        .get("description").toString()))
                 .temp(jsonResponse.getJSONObject("main").get("temp").toString())
                 .pressure(jsonResponse.getJSONObject("main").get("pressure").toString())
                 .humidity(jsonResponse.getJSONObject("main").get("humidity").toString())
@@ -92,6 +94,11 @@ public class WeatherServiceImpl implements WeatherService {
         if (jsonResponse.has("visibility") && !jsonResponse.isNull("visibility"))
             cityAnswerModel.setVisibility(jsonResponse.get("visibility").toString());
         return cityAnswerModel;
+    }
+
+    private String addEmoji(String description){
+        String emoji = dbRepository.searchEmoji(description);
+        return EmojiParser.parseToUnicode(description + emoji);
     }
 
     private String makeCorrectCityNameFormat(String city) {
