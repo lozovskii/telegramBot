@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
+import java.util.List;
+
 @Profile("prod")
 @Repository
 public class DBRepositoryPostgresImpl implements DBRepository {
@@ -28,11 +30,11 @@ public class DBRepositoryPostgresImpl implements DBRepository {
     public String searchQuickAnswer(String phrase) {
         String quickAnswerQuery = queryService.getQuery("getQuickAnswer");
         SqlParameterSource source = new MapSqlParameterSource("phrase", phrase);
-        String answer = jdbcTemplate.queryForObject(quickAnswerQuery, source, (resultSet, i) -> resultSet.getString("answer"));
-        if(answer == null){
+        List<String> answer = jdbcTemplate.query(quickAnswerQuery, source, (resultSet, i) -> resultSet.getString("answer"));
+        if(answer.isEmpty()){
             return null;
         }
-        return answer;
+        return answer.get(0);
     }
 
     @Override
