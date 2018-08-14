@@ -21,7 +21,7 @@ public class DBServicePostgresImpl implements DBService {
 
     @Override
     public String searchAnswer(String phrase) {
-        return dbRepository.searchAnswer(phrase);
+        return dbRepository.searchQuickAnswer(phrase);
     }
 
 
