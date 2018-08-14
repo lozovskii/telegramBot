@@ -1,16 +1,12 @@
 package com.bot.service.Impl;
 
 import com.bot.model.CityAnswerModel;
-import com.bot.repository.DBRepository;
 import com.bot.service.CurrencyService;
 import com.bot.service.DBService;
 import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
 import com.bot.util.exception.NoSuchCityException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 

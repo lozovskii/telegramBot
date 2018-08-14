@@ -33,7 +33,6 @@ public class WeatherServiceImpl implements WeatherService {
 
     @Autowired
     private DBRepository dbRepository;
-
     @Autowired
     private WebService webService;
     @Autowired
