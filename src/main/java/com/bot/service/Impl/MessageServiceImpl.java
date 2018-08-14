@@ -1,6 +1,7 @@
 package com.bot.service.Impl;
 
 import com.bot.model.CityAnswerModel;
+import com.bot.repository.DBRepository;
 import com.bot.service.CurrencyService;
 import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
@@ -19,34 +20,27 @@ import java.util.stream.Collectors;
 @Service
 public class MessageServiceImpl implements MessageService {
 
-    @Value("${help}")
-    private String HELP;
     @Autowired
     private WeatherService weatherService;
     @Autowired
     private CurrencyService currencyService;
+    @Autowired
+    private DBRepository dbRepository;
 
     @Override
     public String getAnswer(Message msg) throws IOException {
-        String phrase = msg.getText();
+        String phrase = msg.getText().toLowerCase();
         if (msg.getLocation() != null) {
             return weatherService.getWeatherByCoord(msg).toString();
         }
-        switch (phrase.toLowerCase()) {
+        String quickAnswer = dbRepository.searchQuickAnswer(phrase);
+        switch (quickAnswer) {
             case "/start":
                 return "Hello, world! This is simple bot!";
-            case "yo":
-            case "hello":
-            case "hi":
-                return "Bonjour!";
-            case "what is your name?":
-                return "My name test503503Bot";
             case "ccurr":
                 return parseCryptoCurrency(currencyService.getTopCryptoCurrency().toString());
             case "curr":
                 return parseCryptoCurrency(currencyService.getCurrencyInfo().toString());
-            case "help":
-                return HELP;
             default:
                 try {
                     String cityId = weatherService.getCityId(phrase);

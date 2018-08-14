@@ -26,7 +26,7 @@ public class DBRepositoryMongoImpl implements DBRepository {
     }
 
     @Override
-    public String searchAnswer(String phrase) {
+    public String searchQuickAnswer(String phrase) {
         return null;
     }
 
