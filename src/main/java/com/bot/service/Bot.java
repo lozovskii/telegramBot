@@ -16,7 +16,10 @@ import java.io.IOException;
 @Service
 public class Bot extends TelegramLongPollingBot {
 
+    @Autowired
     private MessageService messageService;
+    @Autowired
+    private DBService dbService;
 
     @Value("${botName}")
     private String botName;
@@ -24,14 +27,11 @@ public class Bot extends TelegramLongPollingBot {
     @Value("${botToken}")
     private String botToken;
 
-    @Autowired
-    public void setMessageService(MessageService messageService) {
-        this.messageService = messageService;
-    }
 
     @Override
     public void onUpdateReceived(Update update) {
         Message msg = update.getMessage();
+        dbService.addUserInfo(msg.getContact(), msg.getChatId());
         String answer = getAnswer(msg);
         sendMsg(msg, answer);
     }

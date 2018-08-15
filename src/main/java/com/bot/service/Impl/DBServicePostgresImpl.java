@@ -5,6 +5,7 @@ import com.bot.service.DBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 
 @Profile("prod")
@@ -15,8 +16,10 @@ public class DBServicePostgresImpl implements DBService {
     private DBRepository dbRepository;
 
     @Override
-    public void addUserInfo(Contact contact, Long chatID) {
-        dbRepository.addUserInfo(contact, chatID);
+    public void addUserInfo(Contact contact, Long chatId) {
+        Assert.notNull(contact,"The contact must not be null");
+        Assert.notNull(chatId,"The chatId must not be null");
+        dbRepository.addUserInfo(contact, chatId);
     }
 
     @Override

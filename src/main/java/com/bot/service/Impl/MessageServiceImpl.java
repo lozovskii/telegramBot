@@ -6,6 +6,7 @@ import com.bot.service.DBService;
 import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
 import com.bot.util.exception.NoSuchCityException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class MessageServiceImpl implements MessageService {
 
@@ -32,8 +34,10 @@ public class MessageServiceImpl implements MessageService {
         }
         String quickAnswer = dbService.searchAnswer(phrase);
         if (quickAnswer != null) {
+            log.info("Quick answer is: " + quickAnswer);
             return quickAnswer;
         } else {
+            log.info("Phrase is: " + phrase);
             switch (phrase) {
                 case "/start":
                     return "Hello, world! This is simple bot!";
@@ -55,7 +59,7 @@ public class MessageServiceImpl implements MessageService {
 
     private String parseWeather(String weather) {
         return Arrays.stream(weather.split("\\n"))
-                .filter(x -> !x.contains("Visibility = 'null'"))
+                .filter(x -> !x.contains("Visibility = null"))
                 .collect(Collectors.joining("\n"));
     }
 
