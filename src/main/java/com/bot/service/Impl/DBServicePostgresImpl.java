@@ -17,7 +17,7 @@ public class DBServicePostgresImpl implements DBService {
 
     @Override
     public void addUserInfo(Contact contact, Long chatId) {
-        Assert.notNull(contact.toString(),"The contact must not be null");
+//        Assert.notNull(contact.toString(),"The contact must not be null");
         Assert.notNull(chatId,"The chatId must not be null");
         dbRepository.addUserInfo(contact, chatId);
     }

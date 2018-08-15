@@ -1,18 +1,19 @@
 package com.bot.service;
 
 import com.bot.util.exception.NoAnswerException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 
+@Slf4j
 @Service
 public class Bot extends TelegramLongPollingBot {
 
@@ -31,6 +32,7 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message msg = update.getMessage();
+        log.info(msg.getContact().toString());
         dbService.addUserInfo(msg.getContact(), msg.getChatId());
         String answer = getAnswer(msg);
         sendMsg(msg, answer);
