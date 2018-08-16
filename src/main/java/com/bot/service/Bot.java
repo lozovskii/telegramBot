@@ -83,7 +83,8 @@ public class Bot extends TelegramLongPollingBot {
 
         List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add(new KeyboardButton("yo"));
+        keyboardFirstRow.add(new KeyboardButton("Crypto currency"));
+        keyboardFirstRow.add(new KeyboardButton("Currency"));
 
         keyboard.add(keyboardFirstRow);
         keyboardMarkup.setKeyboard(keyboard);
