@@ -41,9 +41,9 @@ public class MessageServiceImpl implements MessageService {
             switch (phrase) {
                 case "/start":
                     return "Hello, world! This is simple bot!";
-                case "Crypto currency":
+                case "crypto currency":
                     return parseCryptoCurrency(currencyService.getTopCryptoCurrency().toString());
-                case "Currency":
+                case "currency":
                     return parseCryptoCurrency(currencyService.getCurrencyInfo().toString());
                 default:
                     try {
