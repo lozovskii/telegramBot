@@ -1,7 +1,7 @@
 /target/
 
 src/main/resources/data/test.txt
-src/main/resources/data/data.txt
+src/main/resources/data/data.sql
 src/main/resources/application-test.properties
 
 ### STS ###
