@@ -38,17 +38,15 @@ public class DBRepositoryPostgresImpl implements DBRepository {
         String quickAnswerQuery = queryService.getQuery("getQuickAnswer");
         SqlParameterSource source = new MapSqlParameterSource("phrase", phrase);
         List<String> answer = jdbcTemplate.query(quickAnswerQuery, source, (resultSet, i) -> resultSet.getString("answer"));
-        if(answer.isEmpty()){
-            return null;
-        }
-        return answer.get(0);
+        return answer.isEmpty() ? null : answer.get(0);
     }
 
     @Override
     public String searchEmoji(String weatherMood) {
         String emojiQuery = queryService.getQuery("getEmoji");
         SqlParameterSource source = new MapSqlParameterSource("description", weatherMood);
-        return jdbcTemplate.queryForObject(emojiQuery, source, (resultSet, i) -> resultSet.getString("emoji"));
+        List<String> emoji = jdbcTemplate.query(emojiQuery, source, (resultSet, i) -> resultSet.getString("emoji"));
+        return emoji.isEmpty() ? null : emoji.get(0);
     }
 
 }
