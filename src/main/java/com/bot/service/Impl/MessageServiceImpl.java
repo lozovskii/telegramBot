@@ -28,11 +28,14 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public String getAnswer(Message msg) throws IOException {
-        String phrase = msg.getText().toLowerCase();
+        String phrase = "";
+        if(msg.getText() != null){
+            phrase = msg.getText().toLowerCase();
+        }
         if (msg.getLocation() != null) {
             return weatherService.getWeatherByCoord(msg).toString();
         }
-        String quickAnswer = dbService.searchAnswer(phrase);
+        String quickAnswer = dbService.searchQuickAnswer(phrase);
         if (quickAnswer != null) {
             log.info("Quick answer is: " + quickAnswer);
             return quickAnswer;

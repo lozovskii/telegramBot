@@ -1,7 +1,7 @@
 package com.bot.service.Impl;
 
 import com.bot.model.CityAnswerModel;
-import com.bot.repository.DBRepository;
+import com.bot.service.DBService;
 import com.bot.service.WeatherService;
 import com.bot.service.WebService;
 import com.bot.util.exception.NoSuchCityException;
@@ -32,7 +32,7 @@ public class WeatherServiceImpl implements WeatherService {
     private final Integer GETTING_FULL_SUBJSON = 0;
 
     @Autowired
-    private DBRepository dbRepository;
+    private DBService dbService;
     @Autowired
     private WebService webService;
     @Autowired
@@ -56,7 +56,8 @@ public class WeatherServiceImpl implements WeatherService {
         try {
             rowEntity = json.first();
         } catch (NoSuchElementException e) {
-            throw new NoSuchCityException("This city name is not correct or city with this name does not exist!", e);
+            throw new NoSuchCityException("This city name is not correct or city with this name does not exist! " +
+                    "Or phrase is empty", e);
         }
         return (((Row) rowEntity).get(CITY_ID_INDEX).toString());
     }
@@ -96,7 +97,7 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     private String addEmoji(String description){
-        String emoji = dbRepository.searchEmoji(description);
+        String emoji = dbService.searchEmoji(description);
         return EmojiParser.parseToUnicode(description + emoji);
     }
 

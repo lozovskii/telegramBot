@@ -23,13 +23,14 @@ public class DBServicePostgresImpl implements DBService {
     }
 
     @Override
-    public String searchAnswer(String phrase) {
+    public String searchQuickAnswer(String phrase) {
         return dbRepository.searchQuickAnswer(phrase);
     }
 
     @Override
     public String searchEmoji(String weatherMood) {
-        return dbRepository.searchEmoji(weatherMood);
+        String emoji = dbRepository.searchEmoji(weatherMood);
+        return emoji == null ? "" : emoji;
     }
 
 }
