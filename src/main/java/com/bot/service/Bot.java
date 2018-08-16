@@ -9,9 +9,14 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -51,6 +56,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private void sendMsg(Message msg, String text) {
         SendMessage message = new SendMessage();
+        setButtons(message);
         message.setChatId(msg.getChatId());
         message.setText(text);
         try {
@@ -67,4 +73,20 @@ public class Bot extends TelegramLongPollingBot {
             throw new NoAnswerException("Failed to get answer for text: " + message.getText(), e);
         }
     }
+
+    private void setButtons(SendMessage sendMessage){
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(keyboardMarkup);
+        keyboardMarkup.setSelective(true);
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setOneTimeKeyboard(false);
+
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        keyboardFirstRow.add(new KeyboardButton("yo"));
+
+        keyboard.add(keyboardFirstRow);
+        keyboardMarkup.setKeyboard(keyboard);
+    }
+
 }
