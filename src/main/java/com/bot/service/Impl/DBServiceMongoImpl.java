@@ -20,7 +20,7 @@ public class DBServiceMongoImpl implements DBService {
     }
 
     @Override
-    public String searchAnswer(String phrase) {
+    public String searchQuickAnswer(String phrase) {
         return dbRepository.searchQuickAnswer(phrase);
     }
 
