@@ -1,5 +1,6 @@
 package com.bot.service;
 
+import com.bot.util.GuiServiceUtil;
 import com.bot.util.exception.NoAnswerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +10,9 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -25,7 +21,7 @@ public class Bot extends TelegramLongPollingBot {
     @Autowired
     private MessageService messageService;
     @Autowired
-    private DBService dbService;
+    private GuiServiceUtil guiServiceUtil;
 
     @Value("${botName}")
     private String botName;
@@ -37,9 +33,6 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message msg = update.getMessage();
-//        log.info(msg.getContact().getPhoneNumber());
-//        log.info(msg.getContact().getFirstName());
-//        dbService.addUserInfo(msg.getContact(), msg.getChatId());
         String answer = getAnswer(msg);
         sendMsg(msg, answer);
     }
@@ -56,7 +49,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private void sendMsg(Message msg, String text) {
         SendMessage message = new SendMessage();
-        setButtons(message);
+        guiServiceUtil.drow(message);
         message.setChatId(msg.getChatId());
         message.setText(text);
         try {
@@ -72,22 +65,6 @@ public class Bot extends TelegramLongPollingBot {
         } catch (IOException e) {
             throw new NoAnswerException("Failed to get answer for text: " + message.getText(), e);
         }
-    }
-
-    private void setButtons(SendMessage sendMessage){
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        sendMessage.setReplyMarkup(keyboardMarkup);
-        keyboardMarkup.setSelective(true);
-        keyboardMarkup.setResizeKeyboard(true);
-        keyboardMarkup.setOneTimeKeyboard(false);
-
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add(new KeyboardButton("Crypto currency"));
-        keyboardFirstRow.add(new KeyboardButton("Currency"));
-
-        keyboard.add(keyboardFirstRow);
-        keyboardMarkup.setKeyboard(keyboard);
     }
 
 }
