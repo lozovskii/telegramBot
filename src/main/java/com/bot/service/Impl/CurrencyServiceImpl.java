@@ -61,12 +61,12 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public List<CurrencyModel> getCurrencyInfo() throws MalformedURLException{
+    public List<CurrencyModel> getCurrencyInfo() throws MalformedURLException {
         String response = webService.getResponse(new URL(CURRENCY_INFO));
         JSONArray json = new JSONArray(response);
         Iterator<Object> iterator = json.iterator();
         List<CurrencyModel> currencies = new ArrayList<>();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             JSONObject next = (JSONObject) iterator.next();
             CurrencyModel currencyModel = new CurrencyModel();
             currencyModel.setCcy(next.get("ccy").toString());
@@ -76,6 +76,11 @@ public class CurrencyServiceImpl implements CurrencyService {
             currencies.add(currencyModel);
         }
         return currencies;
+    }
+
+    public String parseCryptoCurrency(String cryptoCurrency) {
+        String substring = cryptoCurrency.substring(1, cryptoCurrency.length() - 1);
+        return String.join("\n", substring.split(", "));
     }
 
 }

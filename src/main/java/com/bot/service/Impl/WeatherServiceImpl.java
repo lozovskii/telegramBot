@@ -77,6 +77,12 @@ public class WeatherServiceImpl implements WeatherService {
         return parseResponse(url);
     }
 
+    public String parseWeather(String weather) {
+        return Arrays.stream(weather.split("\\n"))
+                .filter(x -> !x.contains("Visibility = null"))
+                .collect(Collectors.joining("\n"));
+    }
+
     private CityAnswerModel parseResponse(URL url) {
         String response = webService.getResponse(url);
         JSONObject jsonResponse = new JSONObject(response);
@@ -96,7 +102,7 @@ public class WeatherServiceImpl implements WeatherService {
         return cityAnswerModel;
     }
 
-    private String addEmoji(String description){
+    private String addEmoji(String description) {
         String emoji = dbService.searchEmoji(description);
         return EmojiParser.parseToUnicode(description + emoji);
     }

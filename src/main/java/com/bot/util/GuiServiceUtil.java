@@ -12,13 +12,11 @@ import java.util.List;
 @Component
 public class GuiServiceUtil {
 
-    private final String[] buttons = new String[]{"Crypto currency", "Currency"};
-
-    public void drow(SendMessage message) {
-        initKeyBoard(message, buttons);
+    public void draw(SendMessage message, List<String> keyBoardName) {
+        initKeyBoard(message, keyBoardName);
     }
 
-    private void initKeyBoard(SendMessage message, String... buttons){
+    private void initKeyBoard(SendMessage message, List<String> buttons) {
         ReplyKeyboardMarkup keyBoard = createKeyBoard(message);
         KeyboardRow keyBoardRow1 = createAndFillKeyBoardRow(buttons);
         List<KeyboardRow> listRows = new ArrayList<>();
@@ -35,7 +33,7 @@ public class GuiServiceUtil {
         return replyKeyboardMarkup;
     }
 
-    private KeyboardRow createAndFillKeyBoardRow(String... buttonsName) {
+    private KeyboardRow createAndFillKeyBoardRow(List<String> buttonsName) {
         KeyboardRow keyboardRow = new KeyboardRow();
         for (String button : buttonsName)
             keyboardRow.add(new KeyboardButton(button));

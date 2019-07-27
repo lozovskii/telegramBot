@@ -1,7 +1,7 @@
 package com.bot.repository.Impl;
 
 import com.bot.repository.DBRepository;
-import com.bot.util.QueryService;
+import com.bot.util.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,12 +19,12 @@ public class DBRepositoryPostgresImpl implements DBRepository {
     @Autowired
     private NamedParameterJdbcOperations jdbcTemplate;
     @Autowired
-    private QueryService queryService;
+    private PropertyService propertyService;
 
     @Override
     public void addUserInfo(Contact contact, Long chatId) {
-        String addUserInfo = queryService.getQuery("saveUserInfo");
-        SqlParameterSource source = new MapSqlParameterSource("user_id",contact.getUserID())
+        String addUserInfo = propertyService.getProperty("saveUserInfo");
+        SqlParameterSource source = new MapSqlParameterSource("user_id", contact.getUserID())
                 .addValue("chat_id", chatId)
                 .addValue("phone_number", contact.getPhoneNumber())
                 .addValue("first_name", contact.getFirstName())
@@ -35,7 +35,7 @@ public class DBRepositoryPostgresImpl implements DBRepository {
 
     @Override
     public String searchQuickAnswer(String phrase) {
-        String quickAnswerQuery = queryService.getQuery("getQuickAnswer");
+        String quickAnswerQuery = propertyService.getProperty("getQuickAnswer");
         SqlParameterSource source = new MapSqlParameterSource("phrase", phrase);
         List<String> answer = jdbcTemplate.query(quickAnswerQuery, source, (resultSet, i) -> resultSet.getString("answer"));
         return answer.isEmpty() ? null : answer.get(0);
@@ -43,7 +43,7 @@ public class DBRepositoryPostgresImpl implements DBRepository {
 
     @Override
     public String searchEmoji(String weatherMood) {
-        String emojiQuery = queryService.getQuery("getEmoji");
+        String emojiQuery = propertyService.getProperty("getEmoji");
         SqlParameterSource source = new MapSqlParameterSource("description", weatherMood);
         List<String> emoji = jdbcTemplate.query(emojiQuery, source, (resultSet, i) -> resultSet.getString("emoji"));
         return emoji.isEmpty() ? null : emoji.get(0);

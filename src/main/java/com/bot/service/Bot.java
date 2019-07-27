@@ -1,6 +1,5 @@
 package com.bot.service;
 
-import com.bot.util.GuiServiceUtil;
 import com.bot.util.exception.NoAnswerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ public class Bot extends TelegramLongPollingBot {
 
     @Autowired
     private MessageService messageService;
-    @Autowired
-    private GuiServiceUtil guiServiceUtil;
 
     @Value("${botName}")
     private String botName;
@@ -47,11 +44,16 @@ public class Bot extends TelegramLongPollingBot {
         return botToken;
     }
 
+    private String getAnswer(Message message) {
+        try {
+            return messageService.getAnswer(message);
+        } catch (IOException e) {
+            throw new NoAnswerException("Failed to get answer for text: " + message.getText(), e);
+        }
+    }
+
     private void sendMsg(Message msg, String text) {
-        SendMessage message = new SendMessage();
-        guiServiceUtil.drow(message);
-        message.setChatId(msg.getChatId());
-        message.setText(text);
+        SendMessage message = messageService.prepareForSend(msg.getChatId(), text);
         try {
             execute(message);
         } catch (TelegramApiException e) {
@@ -59,12 +61,5 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private String getAnswer(Message message){
-        try {
-            return messageService.getAnswer(message);
-        } catch (IOException e) {
-            throw new NoAnswerException("Failed to get answer for text: " + message.getText(), e);
-        }
-    }
 
 }

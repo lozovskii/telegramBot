@@ -12,4 +12,6 @@ public interface CurrencyService {
 
     List<CurrencyModel> getCurrencyInfo() throws MalformedURLException;
 
+    String parseCryptoCurrency(String cryptoCurrency);
+
 }
