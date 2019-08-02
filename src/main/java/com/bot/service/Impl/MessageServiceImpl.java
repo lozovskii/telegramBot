@@ -5,7 +5,7 @@ import com.bot.service.CurrencyService;
 import com.bot.service.DBService;
 import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
-import com.bot.util.GuiServiceUtil;
+import com.bot.util.Impl.GuiServiceUtilImpl;
 import com.bot.util.PropertyService;
 import com.bot.util.exception.NoSuchCityException;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private DBService dbService;
     @Autowired
-    private GuiServiceUtil guiServiceUtil;
+    private GuiServiceUtilImpl guiServiceUtil;
     @Autowired
     private PropertyService propertyService;
 
@@ -58,7 +58,7 @@ public class MessageServiceImpl implements MessageService {
                 default:
                     try {
                         String cityId = weatherService.getCityId(phrase);
-                        CityAnswerModel weather = weatherService.getWeather(cityId);
+                        CityAnswerModel weather = weatherService.getCurrentWeather(cityId);
                         return weatherService.parseWeather(weather.toString());
                     } catch (NoSuchCityException e) {
                         return "Sorry, but i don't understand...";

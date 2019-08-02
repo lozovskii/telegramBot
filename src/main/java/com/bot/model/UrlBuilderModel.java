@@ -4,13 +4,9 @@ public class UrlBuilderModel {
 
     private final StringBuffer sb;
 
-    public UrlBuilderModel() {
+    public UrlBuilderModel(String root) {
         this.sb = new StringBuffer();
-    }
-
-    public UrlBuilderModel root(String url){
-        sb.append(url);
-        return this;
+        sb.append(root);
     }
 
     public UrlBuilderModel param(String name, String value){
@@ -22,4 +18,8 @@ public class UrlBuilderModel {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return new String(sb);
+    }
 }

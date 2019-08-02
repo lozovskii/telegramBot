@@ -3,6 +3,8 @@ package com.bot.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class CityAnswerModel {
@@ -15,10 +17,11 @@ public class CityAnswerModel {
     private String visibility;
     private String country;
     private String windSpeed;
+    private LocalDateTime date;
 
     public static class CityAnswerModelBuilder{
 
-        private final String name;
+        private String name;
         private String description;
         private String temp;
         private String pressure;
@@ -26,6 +29,7 @@ public class CityAnswerModel {
         private String visibility;
         private String country;
         private String windSpeed;
+        private LocalDateTime date;
 
         public CityAnswerModelBuilder(String name){
             this.name = name;
@@ -66,6 +70,11 @@ public class CityAnswerModel {
             return this;
         }
 
+        public CityAnswerModelBuilder date(LocalDateTime date){
+            this.date = date;
+            return this;
+        }
+
         public CityAnswerModel build(){
             return new CityAnswerModel(this);
         }
@@ -81,6 +90,7 @@ public class CityAnswerModel {
         this.visibility = builder.visibility;
         this.country = builder.country;
         this.windSpeed = builder.windSpeed;
+        this.date = builder.date;
     }
 
     @Override
@@ -92,6 +102,7 @@ public class CityAnswerModel {
                 "Pressure = " + pressure + "\n" +
                 "Humidity = " + humidity + "\n" +
                 "Visibility = " + visibility + "\n" +
-                "Wind Speed = " + windSpeed + ';';
+                "Wind Speed = " + windSpeed + "\n" +
+                "Date = " + date + ";";
     }
 }

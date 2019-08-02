@@ -1,9 +1,11 @@
 package com.bot.service.Impl;
 
 import com.bot.model.CityAnswerModel;
+import com.bot.model.UrlBuilderModel;
 import com.bot.service.DBService;
 import com.bot.service.WeatherService;
 import com.bot.service.WebService;
+import com.bot.util.CommonServiceUtil;
 import com.bot.util.exception.NoSuchCityException;
 import com.vdurmont.emoji.EmojiParser;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -11,6 +13,7 @@ import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,18 +21,16 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.NoSuchElementException;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
     private final Integer CITY_ID_INDEX = 2;
     private final Integer GETTING_FULL_SUBJSON = 0;
+    private final Integer WEATHER_FORECAST_FOR_HALF_DAY = 4;
 
     @Autowired
     private DBService dbService;
@@ -37,11 +38,17 @@ public class WeatherServiceImpl implements WeatherService {
     private WebService webService;
     @Autowired
     private JavaSparkContext sc;
+    @Autowired
+    private CommonServiceUtil commonServiceUtil;
 
     @Value("${weatherToken}")
     private String weatherToken;
     @Value("${jsonPath}")
     private String jsonPath;
+    @Value("${weatherWeatherURL}")
+    private String weatherWeatherUrl;
+    @Value("${weatherForecastURL}")
+    private String weatherForecastUrl;
 
     @Override
     public String getCityId(String city) throws NoSuchCityException {
@@ -63,18 +70,35 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public CityAnswerModel getWeather(String cityId) throws MalformedURLException {
-        URL url = new URL("http://api.openweathermap.org/data/2.5/weather?id=" + cityId +
-                "&units=metric&appid=" + weatherToken);
-        return parseResponse(url);
+    public CityAnswerModel getCurrentWeather(String cityId) {
+        UrlBuilderModel urlBuilderModel = new UrlBuilderModel(weatherWeatherUrl)
+                .param("id", cityId)
+                .param("units", "metric")
+                .param("appid", weatherToken);
+        String response = getResponse(urlBuilderModel);
+        return parseResponse(response);
     }
 
     @Override
-    public CityAnswerModel getWeatherByCoord(Message msg) throws MalformedURLException {
+    public List<CityAnswerModel> getWeatherForecast(String cityId) {
+        UrlBuilderModel urlBuilderModel = new UrlBuilderModel(weatherForecastUrl)
+                .param("id", cityId)
+                .param("units", "metric")
+                .param("appid", weatherToken);
+        String response = getResponse(urlBuilderModel);
+        return parseResponseForecast(response);
+    }
+
+    @Override
+    public CityAnswerModel getWeatherByCoord(Message msg) {
         Location location = msg.getLocation();
-        URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + location.getLatitude().toString() +
-                "&lon=" + location.getLongitude().toString() + "&units=metric&appid=" + weatherToken);
-        return parseResponse(url);
+        UrlBuilderModel urlBuilderModel = new UrlBuilderModel(weatherWeatherUrl)
+                .param("lat", location.getLatitude().toString())
+                .param("lon", location.getLongitude().toString())
+                .param("units", "metric")
+                .param("appid", weatherToken);
+        String response = getResponse(urlBuilderModel);
+        return parseResponse(response);
     }
 
     public String parseWeather(String weather) {
@@ -83,8 +107,37 @@ public class WeatherServiceImpl implements WeatherService {
                 .collect(Collectors.joining("\n"));
     }
 
-    private CityAnswerModel parseResponse(URL url) {
-        String response = webService.getResponse(url);
+    private List<CityAnswerModel> parseResponseForecast(String response)  {
+        JSONObject jsonResponse = new JSONObject(response);
+        String name = jsonResponse.getJSONObject("city").get("name").toString();
+        String country = jsonResponse.getJSONObject("city").get("country").toString();
+        JSONArray list = jsonResponse.getJSONArray("list");
+        List<CityAnswerModel> result = new ArrayList<>();
+
+        list.forEach(x -> {
+            if(result.size() < WEATHER_FORECAST_FOR_HALF_DAY){
+                JSONObject member = (JSONObject) x;
+                String date = member.get("dt_txt").toString();
+                String temperature = member.getJSONObject("main").get("temp").toString();
+                String description = member.getJSONArray("weather").getJSONObject(0).get("description").toString();
+
+                LocalDateTime formatDate = commonServiceUtil.parseDate(date);
+
+                CityAnswerModel cityAnswerModel = new CityAnswerModel.CityAnswerModelBuilder(name)
+                        .date(formatDate)
+                        .temp(temperature)
+                        .description(description)
+                        .country(country)
+                        .build();
+
+                result.add(cityAnswerModel);
+            }
+        });
+
+        return result;
+    }
+
+    private CityAnswerModel parseResponse(String response) {
         JSONObject jsonResponse = new JSONObject(response);
         CityAnswerModel cityAnswerModel = new CityAnswerModel
                 .CityAnswerModelBuilder(jsonResponse.get("name").toString())
@@ -113,10 +166,9 @@ public class WeatherServiceImpl implements WeatherService {
                 .collect(Collectors.joining(" "));
     }
 
-    private String parseDateFromUnixFormat(String unixDate) {
-        Date date = new Date(Long.valueOf(unixDate) * 1000L);
-        SimpleDateFormat jdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        return jdf.format(date);
+    private String getResponse(UrlBuilderModel urlBuilderModel){
+        URL url = commonServiceUtil.parseToURL(urlBuilderModel);
+        return webService.sendRequest(url);
     }
 
 }

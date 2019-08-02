@@ -1,4 +1,4 @@
-package com.bot.util;
+package com.bot.util.Impl;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;

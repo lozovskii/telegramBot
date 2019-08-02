@@ -29,7 +29,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public List<CryptoCurrencyModel> getTopCryptoCurrency() throws MalformedURLException {
-        String response = webService.getResponse(new URL(TOP15_CRYPT_CURR_URL));
+        String response = webService.sendRequest(new URL(TOP15_CRYPT_CURR_URL));
         JSONObject jsonResponse = new JSONObject(response);
         JSONObject dataNode = jsonResponse.getJSONObject("data");
         Iterator dataNodeKyes = dataNode.keys();
@@ -62,7 +62,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public List<CurrencyModel> getCurrencyInfo() throws MalformedURLException {
-        String response = webService.getResponse(new URL(CURRENCY_INFO));
+        String response = webService.sendRequest(new URL(CURRENCY_INFO));
         JSONArray json = new JSONArray(response);
         Iterator<Object> iterator = json.iterator();
         List<CurrencyModel> currencies = new ArrayList<>();

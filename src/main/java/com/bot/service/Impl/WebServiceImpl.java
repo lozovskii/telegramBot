@@ -13,7 +13,7 @@ import java.net.URL;
 @Service
 public class WebServiceImpl implements WebService {
     @Override
-    public String getResponse(URL url) {
+    public String sendRequest(URL url) {
         try {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");

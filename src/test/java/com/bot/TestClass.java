@@ -122,7 +122,7 @@ public class TestClass {
     @Ignore
     @Test
     public void getWeather() throws IOException {
-        CityAnswerModel weather = weatherService.getWeather("703448");
+        CityAnswerModel weather = weatherService.getCurrentWeather("703448");
 
         log.debug(weather);
     }

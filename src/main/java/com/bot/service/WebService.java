@@ -4,6 +4,6 @@ import java.net.URL;
 
 public interface WebService {
 
-    String getResponse(URL url);
+    String sendRequest(URL url);
 
 }
