@@ -5,6 +5,7 @@ src/main/resources/data/data.sql
 src/main/resources/application-test.properties
 
 ### STS ###
+/tbLogs.log
 .apt_generated
 .classpath
 .factorypath
