@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface GuiServiceUtil {
 
-    void draw(SendMessage message, List<String> keyBoardName);
+    void drawKeyBoard(SendMessage message, List<String> keyBoardName);
 
 }
