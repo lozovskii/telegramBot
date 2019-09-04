@@ -1,4 +1,4 @@
-package com.bot.util.Impl;
+package com.bot.util.impl;
 
 import com.bot.util.PropertyService;
 import org.springframework.context.annotation.PropertySource;

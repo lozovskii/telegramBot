@@ -1,7 +1,7 @@
-package com.bot.repository.Impl;
+package com.bot.repository.impl;
 
 import com.bot.repository.DBRepository;
-import com.bot.util.Impl.MongoDataBase;
+import com.bot.util.impl.MongoDataBase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;

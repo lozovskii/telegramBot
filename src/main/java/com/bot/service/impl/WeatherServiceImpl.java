@@ -1,4 +1,4 @@
-package com.bot.service.Impl;
+package com.bot.service.impl;
 
 import com.bot.model.CityAnswerModel;
 import com.bot.model.UrlBuilderModel;

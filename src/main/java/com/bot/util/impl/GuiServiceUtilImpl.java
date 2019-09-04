@@ -1,4 +1,4 @@
-package com.bot.util.Impl;
+package com.bot.util.impl;
 
 import com.bot.util.GuiServiceUtil;
 import org.springframework.stereotype.Service;

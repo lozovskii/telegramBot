@@ -1,4 +1,4 @@
-package com.bot.service.Impl;
+package com.bot.service.impl;
 
 import com.bot.service.DBService;
 import com.bot.service.UserService;

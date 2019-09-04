@@ -1,4 +1,4 @@
-package com.bot.service.Impl;
+package com.bot.service.impl;
 
 import com.bot.model.CryptoCurrencyModel;
 import com.bot.model.CurrencyModel;

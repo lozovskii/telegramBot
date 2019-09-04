@@ -1,11 +1,11 @@
-package com.bot.service.Impl;
+package com.bot.service.impl;
 
 import com.bot.model.CityAnswerModel;
 import com.bot.service.CurrencyService;
 import com.bot.service.DBService;
 import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
-import com.bot.util.Impl.GuiServiceUtilImpl;
+import com.bot.util.impl.GuiServiceUtilImpl;
 import com.bot.util.PropertyService;
 import com.bot.util.exception.NoSuchCityException;
 import lombok.extern.slf4j.Slf4j;

@@ -1,40 +1,32 @@
-package com.bot.service.Impl;
+package com.bot.service.impl;
 
 import com.bot.repository.DBRepository;
 import com.bot.service.DBService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 
-@Profile("prod")
-@Slf4j
+@Profile("test")
 @Service
-public class DBServicePostgresImpl implements DBService {
+public class DBServiceMongoImpl implements DBService {
 
     @Autowired
     private DBRepository dbRepository;
 
     @Override
     public void addUserInfo(Contact contact, Long chatId) {
-//        Assert.notNull(contact.toString(),"The contact must not be null");
-        Assert.notNull(chatId,"The chatId must not be null");
         dbRepository.addUserInfo(contact, chatId);
     }
 
     @Override
     public String searchQuickAnswer(String phrase) {
-        String quickAnswer = dbRepository.searchQuickAnswer(phrase);
-        log.info("Quick answer is: " + quickAnswer);
-        return quickAnswer;
+        return dbRepository.searchQuickAnswer(phrase);
     }
 
     @Override
     public String searchEmoji(String weatherMood) {
-        String emoji = dbRepository.searchEmoji(weatherMood);
-        return emoji == null ? "" : emoji;
+        return dbRepository.searchEmoji(weatherMood);
     }
 
 }

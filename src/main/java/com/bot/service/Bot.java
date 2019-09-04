@@ -26,7 +26,6 @@ public class Bot extends TelegramLongPollingBot {
     @Value("${botToken}")
     private String botToken;
 
-
     @Override
     public void onUpdateReceived(Update update) {
         Message msg = update.getMessage();
@@ -60,6 +59,4 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
-
 }
