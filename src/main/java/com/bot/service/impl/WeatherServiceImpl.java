@@ -1,6 +1,6 @@
 package com.bot.service.impl;
 
-import com.bot.model.CityAnswerModel;
+import com.bot.model.WeatherModel;
 import com.bot.model.UrlBuilderModel;
 import com.bot.service.DBService;
 import com.bot.service.WeatherService;
@@ -70,7 +70,7 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public CityAnswerModel getCurrentWeather(String cityId) {
+    public WeatherModel getCurrentWeather(String cityId) {
         UrlBuilderModel urlBuilderModel = new UrlBuilderModel(weatherWeatherUrl)
                 .param("id", cityId)
                 .param("units", "metric")
@@ -80,7 +80,7 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public List<CityAnswerModel> getWeatherForecast(String cityId) {
+    public List<WeatherModel> getWeatherForecast(String cityId) {
         UrlBuilderModel urlBuilderModel = new UrlBuilderModel(weatherForecastUrl)
                 .param("id", cityId)
                 .param("units", "metric")
@@ -90,7 +90,7 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public CityAnswerModel getWeatherByCoord(Message msg) {
+    public WeatherModel getWeatherByCoord(Message msg) {
         Location location = msg.getLocation();
         UrlBuilderModel urlBuilderModel = new UrlBuilderModel(weatherWeatherUrl)
                 .param("lat", location.getLatitude().toString())
@@ -107,12 +107,12 @@ public class WeatherServiceImpl implements WeatherService {
                 .collect(Collectors.joining("\n"));
     }
 
-    private List<CityAnswerModel> parseResponseForecast(String response)  {
+    private List<WeatherModel> parseResponseForecast(String response)  {
         JSONObject jsonResponse = new JSONObject(response);
         String name = jsonResponse.getJSONObject("city").get("name").toString();
         String country = jsonResponse.getJSONObject("city").get("country").toString();
         JSONArray list = jsonResponse.getJSONArray("list");
-        List<CityAnswerModel> result = new ArrayList<>();
+        List<WeatherModel> result = new ArrayList<>();
 
         list.forEach(x -> {
             if(result.size() < WEATHER_FORECAST_FOR_HALF_DAY){
@@ -123,24 +123,23 @@ public class WeatherServiceImpl implements WeatherService {
 
                 LocalDateTime formatDate = commonServiceUtil.parseDate(date);
 
-                CityAnswerModel cityAnswerModel = new CityAnswerModel.CityAnswerModelBuilder(name)
+                WeatherModel weatherModel = new WeatherModel.WeatherModelBuilder(name)
                         .date(formatDate)
                         .temp(temperature)
                         .description(description)
                         .country(country)
                         .build();
 
-                result.add(cityAnswerModel);
+                result.add(weatherModel);
             }
         });
 
         return result;
     }
 
-    private CityAnswerModel parseResponse(String response) {
+    private WeatherModel parseResponse(String response) {
         JSONObject jsonResponse = new JSONObject(response);
-        CityAnswerModel cityAnswerModel = new CityAnswerModel
-                .CityAnswerModelBuilder(jsonResponse.get("name").toString())
+        WeatherModel weatherModel = new WeatherModel.WeatherModelBuilder(jsonResponse.get("name").toString())
                 .description(addEmoji(jsonResponse.getJSONArray("weather")
                         .getJSONObject(GETTING_FULL_SUBJSON)
                         .get("description").toString()))
@@ -151,8 +150,8 @@ public class WeatherServiceImpl implements WeatherService {
                 .windSpeed(jsonResponse.getJSONObject("wind").get("speed").toString())
                 .build();
         if (jsonResponse.has("visibility") && !jsonResponse.isNull("visibility"))
-            cityAnswerModel.setVisibility(jsonResponse.get("visibility").toString());
-        return cityAnswerModel;
+            weatherModel.setVisibility(jsonResponse.get("visibility").toString());
+        return weatherModel;
     }
 
     private String addEmoji(String description) {

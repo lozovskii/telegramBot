@@ -1,6 +1,6 @@
 package com.bot.service.impl;
 
-import com.bot.model.CityAnswerModel;
+import com.bot.model.WeatherModel;
 import com.bot.service.CurrencyService;
 import com.bot.service.DBService;
 import com.bot.service.MessageService;
@@ -63,7 +63,7 @@ public class MessageServiceImpl implements MessageService {
             default:
                 try {
                     String cityId = weatherService.getCityId(phrase);
-                    CityAnswerModel weather = weatherService.getCurrentWeather(cityId);
+                    WeatherModel weather = weatherService.getCurrentWeather(cityId);
                     return weatherService.parseWeather(weather.toString());
                 } catch (NoSuchCityException e) {
                     return "Sorry, but i don't understand...";

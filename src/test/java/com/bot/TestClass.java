@@ -1,7 +1,7 @@
 package com.bot;
 
 import com.bot.config.AppConfig;
-import com.bot.model.CityAnswerModel;
+import com.bot.model.WeatherModel;
 import com.bot.model.CryptoCurrencyModel;
 import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
@@ -122,7 +122,7 @@ public class TestClass {
     @Ignore
     @Test
     public void getWeather() throws IOException {
-        CityAnswerModel weather = weatherService.getCurrentWeather("703448");
+        WeatherModel weather = weatherService.getCurrentWeather("703448");
 
         log.debug(weather);
     }
