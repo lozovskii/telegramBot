@@ -5,22 +5,29 @@ import com.bot.service.CurrencyService;
 import com.bot.service.DBService;
 import com.bot.service.MessageService;
 import com.bot.service.WeatherService;
+import com.bot.util.factory.CommandFactory;
 import com.bot.util.impl.GuiServiceUtilImpl;
 import com.bot.util.PropertyService;
 import com.bot.util.exception.NoSuchCityException;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Slf4j
 @Service
 public class MessageServiceImpl implements MessageService {
+    private static Logger LOGGER = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     @Autowired
     private WeatherService weatherService;
@@ -32,6 +39,7 @@ public class MessageServiceImpl implements MessageService {
     private GuiServiceUtilImpl guiServiceUtil;
     @Autowired
     private PropertyService propertyService;
+    private CommandFactory commandFactory;
 
     @Override
     public String getAnswer(Message msg) throws IOException {
@@ -52,25 +60,6 @@ public class MessageServiceImpl implements MessageService {
 
     }
 
-    private String fetchAnswer(String phrase) throws IOException {
-        switch (phrase) {
-            case "/start":
-                return "Hello, world! This is simple bot!";
-            case "crypto currency":
-                return currencyService.parseCryptoCurrency(currencyService.getTopCryptoCurrency().toString());
-            case "currency":
-                return currencyService.parseCryptoCurrency(currencyService.getCurrencyInfo().toString());
-            default:
-                try {
-                    String cityId = weatherService.getCityId(phrase);
-                    WeatherModel weather = weatherService.getCurrentWeather(cityId);
-                    return weatherService.parseWeather(weather.toString());
-                } catch (NoSuchCityException e) {
-                    return "Sorry, but i don't understand...";
-                }
-        }
-    }
-
     @Override
     public SendMessage prepareForSend(Long chatId, String text) {
         SendMessage message = new SendMessage();
@@ -79,6 +68,52 @@ public class MessageServiceImpl implements MessageService {
         message.setChatId(chatId);
         message.setText(text);
         return message;
+    }
+
+    private String fetchAnswer(String phrase) throws IOException {
+        String answer = commandFactory.call(phrase);
+        if (answer == null) {
+            try {
+                String cityId = weatherService.getCityId(phrase);
+                WeatherModel weather = weatherService.getCurrentWeather(cityId);
+                answer = weatherService.parseWeather(weather.toString());
+            } catch (NoSuchCityException e) {
+                answer = "Sorry, but i don't understand...";
+            }
+        }
+        return answer;
+    }
+
+    @PostConstruct
+    private void postConstruct() {
+        commandFactory = CommandFactory.factory(map -> {
+                    map.addCommand("Currency", () -> {
+                        String result = null;
+                        try {
+                            result = currencyService.parseCryptoCurrency(currencyService.getCurrencyInfo().toString());
+                        } catch (MalformedURLException e) {
+                            LOGGER.debug("While try to execute Currency command, throw: {}", e);
+                        }
+                        return result;
+                    });
+                    map.addCommand("CryptoCurrency", () -> {
+                        String result = null;
+                        try {
+                            result = currencyService.parseCryptoCurrency(currencyService.getTopCryptoCurrency().toString());
+                        } catch (MalformedURLException e) {
+                            LOGGER.debug("While try to execute CryptoCurrency command, throw: {}", e);
+                        }
+                        return result;
+                    });
+                    map.addCommand("/start", () -> "Hello, world! This is simple bot!");
+                }
+        );
+    }
+
+    //todo try to change code above, don't copy paste yourself
+    private Supplier<String> process(){
+
+        return null;
     }
 
 }
