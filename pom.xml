@@ -26,7 +26,7 @@
         <org.projectlombok.version>1.16.20</org.projectlombok.version>
         <log4j.version>1.2.17</log4j.version>
         <org.mongodb.version>3.8.0</org.mongodb.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <com.google.guava.version>15.0</com.google.guava.version>
     </properties>
 
